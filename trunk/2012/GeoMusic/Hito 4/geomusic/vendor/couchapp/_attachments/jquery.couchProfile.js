@@ -50,7 +50,20 @@
         
         });
        */ 
-        
+
+	/*
+	
+	$('#link_inicio').click(function(){
+	//alert("HELLO");	
+       	$.ajax({
+        	url:'usuario.html', global:false, success: function(data){
+        	$("#profile").html(data);
+        	}        
+          });
+	
+	});
+        */        
+
         function profileReady(profile) {
       
 		/*widget.html($.mustache(templates.profileReady, profile));

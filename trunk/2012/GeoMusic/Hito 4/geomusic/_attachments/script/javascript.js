@@ -2,8 +2,6 @@ var geocoder;
 var map;
 var tipobusqueda;
 
-
-
 function pasoamapa(){
 	if (tipobusqueda==1){
 		var contenido = document.getElementById('bandabuscar').value;
@@ -17,6 +15,7 @@ function pasoamapa(){
 	var newh2=document.createElement("h2");
 	var newul=document.createElement("ul");
 	var newbutton=document.createElement("span");
+	var newbutton2=document.createElement("span");
 
 	eliminarElemento('marcos');
 	eliminarElemento('botones');
@@ -26,6 +25,7 @@ function pasoamapa(){
 	newdiv3.id='tabla_result';
 	newh2.id='h2';
 	newbutton.id='boton_volver';
+	newbutton2.id='boton_fav';
 	newdiv1.className = 'estilo_marco';
 	newdiv2.className = 'estilo_marco';
 	newdiv3.className= 'scroll';
@@ -34,26 +34,90 @@ function pasoamapa(){
 	initialize();
 	
 	newbutton.innerHTML='<input type="submit" class="estilo_boton text_boton" value="Buscar de nuevo" onclick="pasoaseleccion()">';
+	newbutton2.innerHTML='<input type="submit" class="estilo_boton text_boton" value="Agregar a favoritos" onclick="guardarfavoritos()">';
 	newh2.innerHTML=contenido;
 	//newul.innerHTML='<p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>hefsdaDwj</p>';
 	
 	newdiv2.appendChild(newbutton);	
+	newdiv2.appendChild(newbutton2);	
 	newdiv2.appendChild(newh2);	
 	newdiv2.appendChild(newdiv3);
 
 	document.getElementById("profile").appendChild(newdiv2);
 }
 
+function pasoperfil()
+{
+	if (document.getElementById('marcos')){
+	   eliminarElemento('marcos');
+	   eliminarElemento('botones');
+	}else if (document.getElementById('map_canvas')){
+	   eliminarElemento('map_canvas');
+	   eliminarElemento('tabla_result');
+	   eliminarElemento('text_map');
+	}
+        else{
+	   return;
+        }
+
+	var newdiv1=document.createElement("div");
+	var newdiv2=document.createElement("div");
+	var newdiv3=document.createElement("div");
+	var newdiv4=document.createElement("div");
+	var newh2=document.createElement("h2");
+	var newul=document.createElement("ul");
+	var newspan1=document.createElement("span");
+
+	newdiv1.id = 'map_canvas';//En map_canvas pondremos la foto.
+	newdiv2.id='text_map';
+	newdiv3.id='tabla_result';//Este seria para la columna con los grupos de usuarios
+	newh2.id='h2';
+
+	newdiv1.className = 'estilo_marco';
+	newdiv2.className = 'estilo_marco';
+	newdiv3.className= 'scroll';
+	newdiv4.className= 'botones';
+
+	newspan1.innerHTML='<img id="imagengrupo" alt="grupo" src="Images/box.jpg">';
+	newdiv1.appendChild(newspan1);
+	document.getElementById("profile").appendChild(newdiv1);
+	
+	var usuario=$('#usuarios').text();
+	var posicion=usuario.indexOf("|");
+	usuario=usuario.substring(0, posicion);
+	newh2.innerHTML=usuario;
+	
+	newdiv2.appendChild(newh2);	
+	newdiv2.appendChild(newdiv3);
+	document.getElementById("profile").appendChild(newdiv2);
+	document.getElementById("profile").appendChild(newdiv4);
+
+}//Fin de funcion
+
+
 function pasoaseleccion(){
 
-	elemento = document.getElementById('map_canvas');
+	/*elemento = document.getElementById('map_canvas');
 	if (!elemento){
 		return;
 	}
 	else{
 		eliminarElemento('map_canvas');
-		eliminarElemento('text_map');
-	
+		eliminarElemento('text_map');*/
+
+	/*if (document.getElementById('marcos')){
+	   eliminarElemento('marcos');
+	   eliminarElemento('botones');
+	}*/
+	if (document.getElementById('map_canvas')){
+	   eliminarElemento('map_canvas');
+	   eliminarElemento('tabla_result');
+	   eliminarElemento('text_map');
+	}
+        else{
+	   return;
+        }
+	//Creamos los elementos correspondientes.
 	var newdiv1=document.createElement("div");
 	var newdiv2=document.createElement("div");
 	var newspan1=document.createElement("span");
@@ -82,8 +146,8 @@ function pasoaseleccion(){
 	
 	document.getElementById("profile").appendChild(newdiv1);
 	document.getElementById("profile").appendChild(newdiv2);
-	}
-}
+	//}
+}//FIn de funcion
 
 function conseguirdatos(){
 	//tipobusqueda = 1 buscar banda
@@ -265,7 +329,7 @@ function codeAddress(direccion1, direccion2){
 	
 	
 	}
-}
+}//Fin de funcion
 
 
 function toggleBounce() {
