@@ -46,6 +46,139 @@ function pasoamapa(){
 	document.getElementById("profile").appendChild(newdiv2);
 }
 
+
+function pasoapi()
+{
+	if (document.getElementById('marcos')){
+	   eliminarElemento('marcos');
+	   eliminarElemento('botones');
+	}else if (document.getElementById('map_canvas')){
+	   eliminarElemento('map_canvas');
+	   eliminarElemento('tabla_result');
+	   eliminarElemento('text_map');
+	}else{
+	   return;
+        }
+
+	var newdiv1=document.createElement("div");
+	var newdiv2=document.createElement("div");
+	var newh2=document.createElement("h1");
+	var newh3a=document.createElement("h3");
+	var newh3b=document.createElement("h3");
+	var newh3c=document.createElement("h3");
+	var newh3d=document.createElement("h3");
+	var newpa=document.createElement("p");
+	var newpb=document.createElement("p");
+	var newpc=document.createElement("p");
+	var newpd=document.createElement("p");
+
+
+	newdiv1.id ='cabecera_api';
+	newdiv2.id='contenido_api';
+		
+	newdiv1.className = 'estilo_marco';
+	//newdiv2.className = 'estilo_marco';
+	//newdiv3.className= 'scroll';
+	//newdiv4.className= 'botones';
+
+	newh2.innerHTML='API Methods';
+	newdiv1.appendChild(newh2);
+	document.getElementById("profile").appendChild(newdiv1);
+
+
+
+	newh3a.innerHTML='api1';
+	newh3b.innerHTML='api2';
+	newh3c.innerHTML='api3';
+	newh3d.innerHTML='api4';
+
+	newpa.innerHTML='descripcion1';
+	newpb.innerHTML='descripcion2';
+	newpc.innerHTML='descripcion3';
+	newpd.innerHTML='descripcion4';
+	
+	newh3a.appendChild(newpa);
+	newh3b.appendChild(newpb);
+	newh3c.appendChild(newpc);
+	newh3d.appendChild(newpd);
+
+	newdiv2.appendChild(newh3a);
+	newdiv2.appendChild(newh3b);
+	newdiv2.appendChild(newh3c);
+	newdiv2.appendChild(newh3d);
+
+	document.getElementById("profile").appendChild(newdiv2);
+
+}//Fin de funcion
+
+
+function pasonosotros()
+{
+	if (document.getElementById('marcos')){
+	   eliminarElemento('marcos');
+	   eliminarElemento('botones');
+	}else if (document.getElementById('map_canvas')){
+	   eliminarElemento('map_canvas');
+	   eliminarElemento('tabla_result');
+	   eliminarElemento('text_map');
+	}else{
+	   return;
+        }
+
+	var newdiv1=document.createElement("div");
+	var newdiv2=document.createElement("div");
+	var newh2=document.createElement("h1");
+	var newh3a=document.createElement("h3");
+	var newh3b=document.createElement("h3");
+	var newh3c=document.createElement("h3");
+	var newh3d=document.createElement("h3");
+	var newpa=document.createElement("p");
+	var newpb=document.createElement("p");
+	var newpc=document.createElement("p");
+	var newpd=document.createElement("p");
+
+
+	newdiv1.id ='cabecera_api';
+	newdiv2.id='contenido_api';
+		
+	newpa.className = 'estilo_marco';
+	newpb.className = 'estilo_marco';
+	newpc.className= 'estilo_marco';
+	newpd.className= 'estilo_marco';
+
+	newh2.innerHTML='API Methods';
+	newdiv1.appendChild(newh2);
+	document.getElementById("profile").appendChild(newdiv1);
+
+
+
+	newh3a.innerHTML='api1';
+	newh3b.innerHTML='api2';
+	newh3c.innerHTML='api3';
+	newh3d.innerHTML='api4';
+
+	newpa.innerHTML='descripcion1';
+	newpb.innerHTML='descripcion2';
+	newpc.innerHTML='descripcion3';
+	newpd.innerHTML='descripcion4';
+	
+	newh3a.appendChild(newpa);
+	newh3b.appendChild(newpb);
+	newh3c.appendChild(newpc);
+	newh3d.appendChild(newpd);
+
+	newdiv2.appendChild(newh3a);
+	newdiv2.appendChild(newh3b);
+	newdiv2.appendChild(newh3c);
+	newdiv2.appendChild(newh3d);
+
+	document.getElementById("profile").appendChild(newdiv2);
+
+}//Fin de funcion
+
+
+
+	
 function pasoperfil()
 {
 	if (document.getElementById('marcos')){
@@ -55,8 +188,10 @@ function pasoperfil()
 	   eliminarElemento('map_canvas');
 	   eliminarElemento('tabla_result');
 	   eliminarElemento('text_map');
-	}
-        else{
+	}else if(document.getElementById('cabecera_api')){
+ 	   eliminarElemento('cabecera_api');
+ 	   eliminarElemento('contenido_api');
+	}else{
 	   return;
         }
 
@@ -113,8 +248,10 @@ function pasoaseleccion(){
 	   eliminarElemento('map_canvas');
 	   eliminarElemento('tabla_result');
 	   eliminarElemento('text_map');
-	}
-        else{
+	}else if(document.getElementById('cabecera_api')){
+ 	   eliminarElemento('cabecera_api');
+ 	   eliminarElemento('contenido_api');
+        }else{
 	   return;
         }
 	//Creamos los elementos correspondientes.
