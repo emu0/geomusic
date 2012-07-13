@@ -1,7 +1,49 @@
 var geocoder;
 var map;
 var tipobusqueda;
+var misgrupos;
+var k=0;
+var array;
+//Funcion que deberia ir en el bodyonLoad
+function lanzadera(){
+	leergrupos();
+	initialize();
+}
+//Funcion para leer los grupos
+function leergrupos(){
+//setTimeout(pasoperfil(),300);
+$.couch.session({
+                success : function(session) {
+                   var userCtx = session.userCtx;
+		   $.couch.userDb(function(db) {
+                   var userDocId = "org.couchdb.user:"+userCtx.name;
+		   //Abrimos el documento del usuario elegido 
+		   //alert("Intentando conectar a primer alert: "+userCtx.name);
+        	   db.openDoc(userDocId, {success : function(userDoc) {
+                   misgrupos=userDoc.grupos;
+		   array = misgrupos.split(',');	
+   		   for(var m in array ){
+			if (array[m]=="Agrege grupos a favoritos"){
+				var cadena="Agrege grupos a favoritos"
+				var id=array.indexOf(cadena);
+					if (id !=-1){
+						array.splice(id,1);
+					}//FIn de este if
+			}//Fin del if.
+		   }//Fin del for.
 
+		   //alert(typeof misgrupos);//Esto me dice que es un STRING.....UN STRING !!!!. Lo separamos y convertimos a array
+		   //array = misgrupos.split(',');
+
+		   pasoperfil();
+                }//Fin del function dentro del succes.
+              });//Fin del succes
+            });//FIn de userdB
+         }//FIn del succes de session
+      });//fin del couch session
+}//Fin de funcion
+
+//FUncion pasomapa
 function pasoamapa(){
 	if (tipobusqueda==1){
 		var contenido = document.getElementById('bandabuscar').value;
@@ -46,141 +88,9 @@ function pasoamapa(){
 	document.getElementById("profile").appendChild(newdiv2);
 }
 
-
-function pasoapi()
-{
-	if (document.getElementById('marcos')){
-	   eliminarElemento('marcos');
-	   eliminarElemento('botones');
-	}else if (document.getElementById('map_canvas')){
-	   eliminarElemento('map_canvas');
-	   eliminarElemento('tabla_result');
-	   eliminarElemento('text_map');
-	}else{
-	   return;
-        }
-
-	var newdiv1=document.createElement("div");
-	var newdiv2=document.createElement("div");
-	var newh2=document.createElement("h1");
-	var newh3a=document.createElement("h3");
-	var newh3b=document.createElement("h3");
-	var newh3c=document.createElement("h3");
-	var newh3d=document.createElement("h3");
-	var newpa=document.createElement("p");
-	var newpb=document.createElement("p");
-	var newpc=document.createElement("p");
-	var newpd=document.createElement("p");
-
-
-	newdiv1.id ='cabecera_api';
-	newdiv2.id='contenido_api';
-		
-	newdiv1.className = 'estilo_marco';
-	//newdiv2.className = 'estilo_marco';
-	//newdiv3.className= 'scroll';
-	//newdiv4.className= 'botones';
-
-	newh2.innerHTML='API Methods';
-	newdiv1.appendChild(newh2);
-	document.getElementById("profile").appendChild(newdiv1);
-
-
-
-	newh3a.innerHTML='api1';
-	newh3b.innerHTML='api2';
-	newh3c.innerHTML='api3';
-	newh3d.innerHTML='api4';
-
-	newpa.innerHTML='descripcion1';
-	newpb.innerHTML='descripcion2';
-	newpc.innerHTML='descripcion3';
-	newpd.innerHTML='descripcion4';
-	
-	newh3a.appendChild(newpa);
-	newh3b.appendChild(newpb);
-	newh3c.appendChild(newpc);
-	newh3d.appendChild(newpd);
-
-	newdiv2.appendChild(newh3a);
-	newdiv2.appendChild(newh3b);
-	newdiv2.appendChild(newh3c);
-	newdiv2.appendChild(newh3d);
-
-	document.getElementById("profile").appendChild(newdiv2);
-
-}//Fin de funcion
-
-
-function pasonosotros()
-{
-	if (document.getElementById('marcos')){
-	   eliminarElemento('marcos');
-	   eliminarElemento('botones');
-	}else if (document.getElementById('map_canvas')){
-	   eliminarElemento('map_canvas');
-	   eliminarElemento('tabla_result');
-	   eliminarElemento('text_map');
-	}else{
-	   return;
-        }
-
-	var newdiv1=document.createElement("div");
-	var newdiv2=document.createElement("div");
-	var newh2=document.createElement("h1");
-	var newh3a=document.createElement("h3");
-	var newh3b=document.createElement("h3");
-	var newh3c=document.createElement("h3");
-	var newh3d=document.createElement("h3");
-	var newpa=document.createElement("p");
-	var newpb=document.createElement("p");
-	var newpc=document.createElement("p");
-	var newpd=document.createElement("p");
-
-
-	newdiv1.id ='cabecera_api';
-	newdiv2.id='contenido_api';
-		
-	newpa.className = 'estilo_marco';
-	newpb.className = 'estilo_marco';
-	newpc.className= 'estilo_marco';
-	newpd.className= 'estilo_marco';
-
-	newh2.innerHTML='API Methods';
-	newdiv1.appendChild(newh2);
-	document.getElementById("profile").appendChild(newdiv1);
-
-
-
-	newh3a.innerHTML='api1';
-	newh3b.innerHTML='api2';
-	newh3c.innerHTML='api3';
-	newh3d.innerHTML='api4';
-
-	newpa.innerHTML='descripcion1';
-	newpb.innerHTML='descripcion2';
-	newpc.innerHTML='descripcion3';
-	newpd.innerHTML='descripcion4';
-	
-	newh3a.appendChild(newpa);
-	newh3b.appendChild(newpb);
-	newh3c.appendChild(newpc);
-	newh3d.appendChild(newpd);
-
-	newdiv2.appendChild(newh3a);
-	newdiv2.appendChild(newh3b);
-	newdiv2.appendChild(newh3c);
-	newdiv2.appendChild(newh3d);
-
-	document.getElementById("profile").appendChild(newdiv2);
-
-}//Fin de funcion
-
-
-
-	
 function pasoperfil()
 {
+	//leergrupos();
 	if (document.getElementById('marcos')){
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
@@ -188,13 +98,13 @@ function pasoperfil()
 	   eliminarElemento('map_canvas');
 	   eliminarElemento('tabla_result');
 	   eliminarElemento('text_map');
-	}else if(document.getElementById('cabecera_api')){
- 	   eliminarElemento('cabecera_api');
- 	   eliminarElemento('contenido_api');
-	}else{
+	}
+        else{
 	   return;
         }
+	//alert("este es el segundo alert");
 
+	//Llamamos a la funcion para leer los grupos.
 	var newdiv1=document.createElement("div");
 	var newdiv2=document.createElement("div");
 	var newdiv3=document.createElement("div");
@@ -202,6 +112,14 @@ function pasoperfil()
 	var newh2=document.createElement("h2");
 	var newul=document.createElement("ul");
 	var newspan1=document.createElement("span");
+
+
+	//Creamos ahora la parte correspondiente al boton de borrar los grupos
+	var newbutton=document.createElement("span");
+	newbutton.id='boton_mapa';
+	//newbutton.innerHTML='<input type="submit" class="estilo_boton text_boton" value="Borrar Favorito" onclick="eliminarfavorito()">';
+	newbutton.innerHTML='<input type="text" id="borrar" name="borrarme" maxlength="30" size="10"/>&nbsp&nbsp&nbsp<input type="submit" class="estilo_boton text_boton" value="Borrar Favorito" onclick="eliminarfavorito()">';
+
 
 	newdiv1.id = 'map_canvas';//En map_canvas pondremos la foto.
 	newdiv2.id='text_map';
@@ -220,10 +138,23 @@ function pasoperfil()
 	var usuario=$('#usuarios').text();
 	var posicion=usuario.indexOf("|");
 	usuario=usuario.substring(0, posicion);
-	newh2.innerHTML=usuario;
-	
+	//newh2.innerHTML=misgrupos;
+	newh2.innerHTML=usuario;//aqui va el usuario
+
+	for(var k in array ){
+		var newli=document.createElement("li");
+		//newli.innerHTML=array[k];
+		newli.innerHTML = newli.innerHTML +'<div id="elemento-resultado">' + array[k] + '</div>';
+		newul.appendChild(newli);
+
+	}
+
+	//En esta parte es donde salen los grupos correspondientes.
+	newdiv3.appendChild(newul);
 	newdiv2.appendChild(newh2);	
 	newdiv2.appendChild(newdiv3);
+	newdiv2.appendChild(newbutton);
+	//newdiv4.appendChild(newbutton);
 	document.getElementById("profile").appendChild(newdiv2);
 	document.getElementById("profile").appendChild(newdiv4);
 
@@ -248,10 +179,8 @@ function pasoaseleccion(){
 	   eliminarElemento('map_canvas');
 	   eliminarElemento('tabla_result');
 	   eliminarElemento('text_map');
-	}else if(document.getElementById('cabecera_api')){
- 	   eliminarElemento('cabecera_api');
- 	   eliminarElemento('contenido_api');
-        }else{
+	}
+        else{
 	   return;
         }
 	//Creamos los elementos correspondientes.
@@ -375,8 +304,6 @@ function ponerResultadosMapa(geoString, nombreString){
 	
 	map.fitBounds(bounds);
 	
-
-
 }
 
 function ponerResultadosTabla(stringDatos){
@@ -460,11 +387,6 @@ function codeAddress(direccion1, direccion2){
 			//alert("Geocode was not successful for the following reason: " + status + " Direccion2: " + direccion2);
 		}
 	});
-	
-	
-	
-	
-	
 	}
 }//Fin de funcion
 
@@ -477,3 +399,198 @@ function toggleBounce() {
       marker.setAnimation(google.maps.Animation.BOUNCE);
     }
 }
+
+//En esta funcion se nos agregaran los grupos favoritos.
+//Esta funcion se disparará al pulsar el boton "guardar grupo".
+function guardarfavoritos(){
+	//Lo primero, sacar el grupo a guardar.
+	var salvame=$('h2').text();
+	var k=0;
+	//Ahora, una vez nos hemos asegurado que esta el grupo, entramos a la parte del manejo de usuarios.
+	
+	$.couch.session({
+                success : function(session) {
+                   var userCtx = session.userCtx;
+		   $.couch.userDb(function(db) {
+                   var userDocId = "org.couchdb.user:"+userCtx.name;
+		   //Abrimos el documento del usuario elegido 
+        	   db.openDoc(userDocId, {success : function(userDoc) {
+                   misgrupos=userDoc.grupos;
+		   array = misgrupos.split(',');
+		   //Comprobamos si el grupo que vamos a guardar está en la base de datos.
+		   for(var m in array ){
+			if (array[m]==salvame){
+				alert("Grupo guardado anteriormente.Revise favoritos.");
+				k=1;
+			}//Fin del if.
+		   }//Fin del for.
+		   if(k==0){
+		   	//En caso de que no exista, procedemos a guardarlo.
+		   	array.push(salvame);
+		   	//Creamos una cadena de caracteres.
+		   	var guardar = array.join(",");
+		   	//alert(guardar);Tutto bene
+		  	userDoc["grupos"] = guardar;
+                   	db.saveDoc(userDoc, {success : function() {
+				alert("Grupo agregado a favoritos");
+                    }
+                   });
+		  }//FIn del if.
+                }//Fin del function dentro del succes.
+              });//Fin del succes
+            });//FIn de userdB
+         }//FIn del succes de session
+      });//fin del couch session
+}//End of function
+
+
+//Funcion que nos permite borrar a los grupos correspondientes.
+function eliminarfavorito(){
+	//Lo primero, obtenemos el grupo que vamos a borrar.
+	var borrame=$('#borrar').val();
+	if (borrame == null || borrame ==""){
+		alert("Introduzca por favor un grupo");
+		return;
+	}else{
+	//Como se habran leido los campos, el array ya estará instanciado.
+	var aux=0;
+	//Ahora, una vez nos hemos asegurado que esta el grupo, entramos a la parte del manejo de usuarios.
+	$.couch.session({
+                success : function(session) {
+                   var userCtx = session.userCtx;
+		   $.couch.userDb(function(db) {
+                   var userDocId = "org.couchdb.user:"+userCtx.name;
+		   //Abrimos el documento del usuario elegido 
+        	   db.openDoc(userDocId, {success : function(userDoc) {
+                   misgrupos=userDoc.grupos;
+		   array = misgrupos.split(',');
+		   //Comprobamos si el grupo que vamos a guardar está en la base de datos.
+		   for(var m in array ){
+			if (array[m]==borrame){
+				//alert("Se ha encontrado el grupo");
+				aux=1;
+			}//Fin del if.
+		   }//Fin del for.
+		   if(aux==1){
+		   	//En caso de que exista, se borrará
+			var id=array.indexOf(borrame);
+			if (id !=-1){
+				array.splice(id,1);
+			}//FIn de este if
+		   	//Creamos una cadena de caracteres con el array bien dimensionado
+		   	var guardar = array.join(",");
+		   	//alert(guardar);Tutto bene
+		  	userDoc["grupos"] = guardar;
+                   	db.saveDoc(userDoc, {success : function() {
+				alert("Grupo borrado correctamente");
+				//Aqui, volvemos a llamar a leer los grupos para que se actualize el HTML
+				leergrupos();
+                    }
+                   });
+		  }//FIn del primer if.
+ 		 if(aux==0){
+			alert("El grupo no existe en favoritos");
+		 }//FIn del segundo if
+                }//Fin del function dentro del succes.
+              });//Fin del succes
+            });//FIn de userdB
+         }//FIn del succes de session
+      });//fin del couch session
+   }//Fin el else
+}//End of function
+
+
+/*
+// Funciones relativas al pie de pagina
+function pasonosotros()
+{
+	if (document.getElementById('marcos')){
+	   eliminarElemento('marcos');
+	   eliminarElemento('botones');
+	}else if (document.getElementById('map_canvas')){
+	   eliminarElemento('map_canvas');
+	   eliminarElemento('tabla_result');
+	   eliminarElemento('text_map');
+	}else{
+	   return;
+        }
+
+	var newdiv1=document.createElement("div");
+	var newdiv2=document.createElement("div");
+	var newh2=document.createElement("h1");
+	var newh3a=document.createElement("h3");
+	var newh3b=document.createElement("h3");
+	var newh3c=document.createElement("h3");
+	var newh3d=document.createElement("h3");
+	var newpa=document.createElement("p");
+	var newpb=document.createElement("p");
+	var newpc=document.createElement("p");
+	var newpd=document.createElement("p");
+
+
+	newdiv1.id ='cabecera_api';
+	newdiv2.id='contenido_api';
+		
+	newpa.className = 'estilo_marco';
+	newpb.className = 'estilo_marco';
+	newpc.className= 'estilo_marco';
+	newpd.className= 'estilo_marco';
+
+	newh2.innerHTML='API Methods';
+	newdiv1.appendChild(newh2);
+	document.getElementById("profile").appendChild(newdiv1);
+
+
+
+	newh3a.innerHTML='api1';
+	newh3b.innerHTML='api2';
+	newh3c.innerHTML='api3';
+	newh3d.innerHTML='api4';
+
+	newpa.innerHTML='descripcion1';
+	newpb.innerHTML='descripcion2';
+	newpc.innerHTML='descripcion3';
+	newpd.innerHTML='descripcion4';
+	
+	newh3a.appendChild(newpa);
+	newh3b.appendChild(newpb);
+	newh3c.appendChild(newpc);
+	newh3d.appendChild(newpd);
+
+	newdiv2.appendChild(newh3a);
+	newdiv2.appendChild(newh3b);
+	newdiv2.appendChild(newh3c);
+	newdiv2.appendChild(newh3d);
+
+	document.getElementById("profile").appendChild(newdiv2);
+
+}//Fin de funcion
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
