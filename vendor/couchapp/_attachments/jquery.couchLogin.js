@@ -95,6 +95,6 @@
         $("#account").css({'float':'right', 'position':'relative'});
         $("#profile").show();
         
-       return span;
+        return span;
     }
 })(jQuery);
