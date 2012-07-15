@@ -22,27 +22,30 @@
 <body onload="initialize()">
 	<div id="divmain">
 		<div id="cabecera">
-		  <img id="logo_cabecera" alt="logo" src="Images/logo.gif">
-		       <div id="etiqueta">
-		       <ul id="nav_uno">
-				<li class="item_nav">
-					<a id="link_inicio" onclick="pasoaseleccion()"  class="link_nav">Inicio</a>
-				</li>
-				<li class="item_nav">
-					<a id="link_usuario" onclick="leergrupos()" class="link_nav">Mi perfil</a>
-				</li>
-			</ul>
+			<img id="logo_cabecera" alt="logo" src="Images/logo.gif">
+			<div id="etiqueta">
+				<ul id="nav_uno">
+					<li class="item_nav">
+						<a id="link_inicio" onclick="pasoaseleccion()"  class="link_nav">Inicio</a>
+					</li>
+					<li class="item_nav">
+						<a id="link_usuario" onclick="pasoperfil()" class="link_nav">Mi perfil</a>
+					</li>
+				</ul>
 			</div>
+			<div id="account"></div>				
 		</div>
-
-		<div id="account"></div>
 		<div id="profile"></div>
-
 		<div id="info">
-			<a id="link_api" onclick="pasoapi()"  class="link_nav">Geomusic api  | </a>
-			<a id="Nosotros" onclick="pasonosotros()"  class="link_nav">  Todo sobre "nosotros";)  | </a>
+			<ul id="nav_uno">
+				<li class="item_nav">
+					<a id="link_api" onclick="pasoapi()" class="link_nav">Geomusic api</a>
+				</li>
+				<li class="item_nav">
+					<a id="Nosotros" onclick="pasonosotros()" class="link_nav">  Todo sobre "nosotros";)</a>
+				</li>
+			</ul>			
 		</div>
-
 	</div>
 </body> 
   

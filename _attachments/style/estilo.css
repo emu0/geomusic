@@ -11,10 +11,11 @@ body{
 
 }
 
-h2 {
+#nombre_tabla {
 	color: #0DBA55;
 	width:100%;
 	padding: 0% 0% 0% 0%;
+	vertical-align:middle;
 }
 
 #main{

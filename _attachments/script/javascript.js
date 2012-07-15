@@ -1,49 +1,25 @@
+/*
+LEER TODOS LOS COMENTARIOS ANTES DE MODIFICAR NADA.
+
+HAY QUE AHCER QUE EL BOTON_FAV Y BOTON_FAV_IND DE LAS FUNCIONES TOMEN LA IMAGEN STARFAV.PNG Y STARNOFAV.PNG DE LOS DIRECTORIOS.
+
+PARA QUE SE GUARDEN O BORREN LOS ELEMENTOS DEL PERFIL DEPEDEN DE LA FUNCION ACTUALIZARDATOIND() QUE NO LOGRO QUE FUNCIONE, PORQUE LO QUE HACE ES NO DETETAR EL NOMBRE DE LO QUE ESTAMOS TRABAJANDO
+Y DETECTA UN HUECO EN BLANCO, POR LO QUE BORRA O ESCRIBE ESO EN LA BASE DE DATOS.    <--- ESTO PUEDE SER LO MÁS IMPORTANTE
+
+FALTARÍA MODIFICAR EL METODO PROCESARRESPUESTA PARA QUE TOME LA INFORMACIÓN NECESARIA DEL LASTFM, MOSTRARLA EN CONDICIONES Y AÑADIR EL CONTENIDO A INFOWINDOW DEL GOOGLE MAPS
+
+HAY QUE ENGANCHAR EL PIE DE PÁGINA CON LA INFORMACIÓN, HE PENSADO QUE EN VEZ DE HACER UN PDF PODEMOS COLGAR TODA LA INFORMACIÓN EN "SOBRE GEOMUSIC Y NOSOTROS"
+
+LA COMPROBACIÓN DE CAMPOS DEL REGISTRO PODRÍA SER ALGO INTERESANTE DE HACER
+
+*/
+
 var geocoder;
 var map;
+var infowindow;
 var tipobusqueda;
-var misgrupos;
-var k=0;
-var array;
-//Funcion que deberia ir en el bodyonLoad
-function lanzadera(){
-	leergrupos();
-	initialize();
-}
-//Funcion para leer los grupos
-function leergrupos(){
-//setTimeout(pasoperfil(),300);
-$.couch.session({
-                success : function(session) {
-                   var userCtx = session.userCtx;
-		   $.couch.userDb(function(db) {
-                   var userDocId = "org.couchdb.user:"+userCtx.name;
-		   //Abrimos el documento del usuario elegido 
-		   //alert("Intentando conectar a primer alert: "+userCtx.name);
-        	   db.openDoc(userDocId, {success : function(userDoc) {
-                   misgrupos=userDoc.grupos;
-		   array = misgrupos.split(',');	
-   		   for(var m in array ){
-			if (array[m]=="Agrege grupos a favoritos"){
-				var cadena="Agrege grupos a favoritos"
-				var id=array.indexOf(cadena);
-					if (id !=-1){
-						array.splice(id,1);
-					}//FIn de este if
-			}//Fin del if.
-		   }//Fin del for.
+var array_misgrupos;
 
-		   //alert(typeof misgrupos);//Esto me dice que es un STRING.....UN STRING !!!!. Lo separamos y convertimos a array
-		   //array = misgrupos.split(',');
-
-		   pasoperfil();
-                }//Fin del function dentro del succes.
-              });//Fin del succes
-            });//FIn de userdB
-         }//FIn del succes de session
-      });//fin del couch session
-}//Fin de funcion
-
-//FUncion pasomapa
 function pasoamapa(){
 	if (tipobusqueda==1){
 		var contenido = document.getElementById('bandabuscar').value;
@@ -54,10 +30,11 @@ function pasoamapa(){
 	var newdiv1=document.createElement("div");
 	var newdiv2=document.createElement("div");
 	var newdiv3=document.createElement("div");
-	var newh2=document.createElement("h2");
+	var newdiv4=document.createElement("div");
 	var newul=document.createElement("ul");
 	var newbutton=document.createElement("span");
-	var newbutton2=document.createElement("span");
+	var newspinner=document.createElement("span");
+	var newtittle=document.createElement("span");
 
 	eliminarElemento('marcos');
 	eliminarElemento('botones');
@@ -65,9 +42,11 @@ function pasoamapa(){
 	newdiv1.id = 'map_canvas';
 	newdiv2.id='text_map';
 	newdiv3.id='tabla_result';
-	newh2.id='h2';
+	newdiv4.id='nombre_tabla';
+	newspinner.id='spinner';
+	newul.id='ul_tabla';
 	newbutton.id='boton_volver';
-	newbutton2.id='boton_fav';
+	
 	newdiv1.className = 'estilo_marco';
 	newdiv2.className = 'estilo_marco';
 	newdiv3.className= 'scroll';
@@ -76,21 +55,23 @@ function pasoamapa(){
 	initialize();
 	
 	newbutton.innerHTML='<input type="submit" class="estilo_boton text_boton" value="Buscar de nuevo" onclick="pasoaseleccion()">';
-	newbutton2.innerHTML='<input type="submit" class="estilo_boton text_boton" value="Agregar a favoritos" onclick="guardarfavoritos()">';
-	newh2.innerHTML=contenido;
-	//newul.innerHTML='<p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>heffiwj</p><p>hefsdaDwj</p>';
+	
+	newtittle.innerHTML='<h2 id="nombre_banda"><input id="boton_fav" type="submit" value="" onclick="">'+contenido+'</h2>';
+	newspinner.innerHTML='<img id="spinner" alt="grupo" src="Images/spinner.gif">';
 	
 	newdiv2.appendChild(newbutton);	
-	newdiv2.appendChild(newbutton2);	
-	newdiv2.appendChild(newh2);	
+	
+	newdiv4.appendChild(newspinner);
+	newdiv4.appendChild(newtittle);
+	newdiv2.appendChild(newdiv4);
+		
+	newdiv3.appendChild(newul);	
 	newdiv2.appendChild(newdiv3);
 
 	document.getElementById("profile").appendChild(newdiv2);
 }
 
-function pasoperfil()
-{
-	//leergrupos();
+function pasoperfil(){
 	if (document.getElementById('marcos')){
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
@@ -102,79 +83,45 @@ function pasoperfil()
         else{
 	   return;
         }
-	//alert("este es el segundo alert");
-
-	//Llamamos a la funcion para leer los grupos.
+	
 	var newdiv1=document.createElement("div");
 	var newdiv2=document.createElement("div");
 	var newdiv3=document.createElement("div");
 	var newdiv4=document.createElement("div");
-	var newh2=document.createElement("h2");
 	var newul=document.createElement("ul");
-	var newspan1=document.createElement("span");
+	var newtittle=document.createElement("span");
 
-
-	//Creamos ahora la parte correspondiente al boton de borrar los grupos
-	var newbutton=document.createElement("span");
-	newbutton.id='boton_mapa';
-	//newbutton.innerHTML='<input type="submit" class="estilo_boton text_boton" value="Borrar Favorito" onclick="eliminarfavorito()">';
-	newbutton.innerHTML='<input type="text" id="borrar" name="borrarme" maxlength="30" size="10"/>&nbsp&nbsp&nbsp<input type="submit" class="estilo_boton text_boton" value="Borrar Favorito" onclick="eliminarfavorito()">';
-
-
-	newdiv1.id = 'map_canvas';//En map_canvas pondremos la foto.
+	newdiv1.id = 'map_canvas';
 	newdiv2.id='text_map';
-	newdiv3.id='tabla_result';//Este seria para la columna con los grupos de usuarios
-	newh2.id='h2';
-
+	newdiv3.id='tabla_result';
+	newdiv4.id='nombre_tabla';
+	newul.id='ul_tabla';
+	
 	newdiv1.className = 'estilo_marco';
 	newdiv2.className = 'estilo_marco';
 	newdiv3.className= 'scroll';
-	newdiv4.className= 'botones';
-
-	newspan1.innerHTML='<img id="imagengrupo" alt="grupo" src="Images/box.jpg">';
-	newdiv1.appendChild(newspan1);
-	document.getElementById("profile").appendChild(newdiv1);
 	
-	var usuario=$('#usuarios').text();
-	var posicion=usuario.indexOf("|");
-	usuario=usuario.substring(0, posicion);
-	//newh2.innerHTML=misgrupos;
-	newh2.innerHTML=usuario;//aqui va el usuario
+	document.getElementById("profile").appendChild(newdiv1);
+	initialize();
+	
+	newtittle.innerHTML='<h2>Mis favoritos :)</h2>';
 
-	for(var k in array ){
-		var newli=document.createElement("li");
-		//newli.innerHTML=array[k];
-		newli.innerHTML = newli.innerHTML +'<div id="elemento-resultado">' + array[k] + '</div>';
-		newul.appendChild(newli);
-
-	}
-
-	//En esta parte es donde salen los grupos correspondientes.
-	newdiv3.appendChild(newul);
-	newdiv2.appendChild(newh2);	
+	newdiv4.appendChild(newtittle);
+	newdiv2.appendChild(newdiv4);
+		
+	newdiv3.appendChild(newul);	
 	newdiv2.appendChild(newdiv3);
-	newdiv2.appendChild(newbutton);
-	//newdiv4.appendChild(newbutton);
+
 	document.getElementById("profile").appendChild(newdiv2);
-	document.getElementById("profile").appendChild(newdiv4);
 
-}//Fin de funcion
-
+	ponerResultados(null, array_misgrupos);
+	$('.boton_fav_ind').each(function(){
+      		$(this).show();
+	});
+	actualizarDatosInd();
+}
 
 function pasoaseleccion(){
-
-	/*elemento = document.getElementById('map_canvas');
-	if (!elemento){
-		return;
-	}
-	else{
-		eliminarElemento('map_canvas');
-		eliminarElemento('text_map');*/
-
-	/*if (document.getElementById('marcos')){
-	   eliminarElemento('marcos');
-	   eliminarElemento('botones');
-	}*/
 	if (document.getElementById('map_canvas')){
 	   eliminarElemento('map_canvas');
 	   eliminarElemento('tabla_result');
@@ -183,6 +130,7 @@ function pasoaseleccion(){
         else{
 	   return;
         }
+        
 	//Creamos los elementos correspondientes.
 	var newdiv1=document.createElement("div");
 	var newdiv2=document.createElement("div");
@@ -212,8 +160,7 @@ function pasoaseleccion(){
 	
 	document.getElementById("profile").appendChild(newdiv1);
 	document.getElementById("profile").appendChild(newdiv2);
-	//}
-}//FIn de funcion
+}
 
 function conseguirdatos(){
 	//tipobusqueda = 1 buscar banda
@@ -237,6 +184,7 @@ function conseguirdatos(){
 
 
 function getInfo(url){
+	$("#spinner").show();
 	xmlHttp = new XMLHttpRequest(); 
 	xmlHttp.onload = procesarRespuesta;
 	xmlHttp.open( "GET", url, true );
@@ -244,6 +192,7 @@ function getInfo(url){
 }
 
 function procesarRespuesta(){
+	$("#spinner").hide();
 	if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
         	if (xmlHttp.responseText == "Not found"){
         	    alert('No se ha podido realizar la petición');
@@ -251,30 +200,30 @@ function procesarRespuesta(){
         	else{
         		var datos = eval ( "(" + xmlHttp.responseText + ")" );
         		if(datos.error > 0){
-        			ponerResultadosTabla([datos["message"]]);
+        			ponerResultados(null, [datos["message"]]);
         		}
         		else if(datos.events.total == 0){
-        			ponerResultadosTabla(["No hay conciertos"]);
+        			ponerResultados(null, ["No hay conciertos"]);
         		}
         		
         		else{
         			var adress = 'Congo';
-        			var geoString = new Array;
-        			var nombreString = new Array;
-        			var geoString = [];
-        			var nombreString = [];
-	        		var geoString_part = [0,0];
+        			var geo = new Array;
+        			var nombreArray = new Array;
+        			var geoArray = [];
+        			var nombreArray = [];
+	        		var geoArray_part = [0,0];
 	        		
 	        		for(i in datos.events.event){
-		        		geoString_part[0] = datos.events.event[i].venue.location["geo:point"]["geo:lat"];
-	        			geoString_part[1] = datos.events.event[i].venue.location["geo:point"]["geo:long"];
-	        			if(geoString_part[0] != ''){
-	        				geoString = geoString.concat(new google.maps.LatLng(geoString_part[0], geoString_part[1]));
+		        		geoArray_part[0] = datos.events.event[i].venue.location["geo:point"]["geo:lat"];
+	        			geoArray_part[1] = datos.events.event[i].venue.location["geo:point"]["geo:long"];
+	        			if(geoArray_part[0] != ''){
+	        				geoArray = geoArray.concat(new google.maps.LatLng(geoArray_part[0], geoArray_part[1]));
 	        				if(tipobusqueda==1){
-	        					nombreString = nombreString.concat(datos.events.event[i].venue.location.city);
+	        					nombreArray = nombreArray.concat(datos.events.event[i].venue.location.city);
 	        				}
 	        				else{
-	        					nombreString = nombreString.concat(datos.events.event[i].title);
+	        					nombreArray = nombreArray.concat(datos.events.event[i].title);
 	        				}
 	        			}
 	        			else{
@@ -282,8 +231,7 @@ function procesarRespuesta(){
 	        				//nombreString = nombreString.concat(datos.events.event[i].title);
 	        			}
 	        		}
-	        		ponerResultadosMapa(geoString, nombreString);
-	        		ponerResultadosTabla(nombreString);
+	        		ponerResultados(geoArray, nombreArray);
     			}
         	}                    
     	}
@@ -291,28 +239,27 @@ function procesarRespuesta(){
     		alert('Parece que algo no ha ido bien, por favor, vuelve a intentarlo.')
     	
     	}
+	actualizarDatos();
+	
 }
 
-function ponerResultadosMapa(geoString, nombreString){
-
+function ponerResultados(geoArray, nombreArray){
+	var ul_tabla = document.getElementById("ul_tabla")
 	bounds = new google.maps.LatLngBounds();
-	
- 	for(i in geoString){
-		addMarker(geoString[i], nombreString[i]);
-		bounds.extend(geoString[i]);
+ 	for(i in nombreArray){
+ 		var newdiv=document.createElement("div");
+ 		newdiv.id = nombreArray[i];
+		newdiv.className = 'elemento-resultado';
+ 		newdiv.innerHTML = nombreArray[i]+'<input class="boton_fav_ind" type="submit" name="'+nombreArray[i]+'" value="" onclick="">';
+ 		ul_tabla.appendChild(newdiv);
+ 		
+ 		if(geoArray != null){
+			addMarker(geoArray[i], nombreArray[i]);
+			bounds.extend(geoArray[i]);
+		}
 	}
-	
-	map.fitBounds(bounds);
-	
-}
-
-function ponerResultadosTabla(stringDatos){
-	var newul=document.createElement("ul");
-	//newul.id="elemento-resultado";
-	for(i in stringDatos){
-		newul.innerHTML = newul.innerHTML +'<div id="elemento-resultado">' + stringDatos[i] + '</div>';
-	}		
-	document.getElementById("tabla_result").appendChild(newul);
+	$('.boton_fav_ind').hide();
+	map.fitBounds(bounds);	
 }
 	
 function eliminarElemento(id){
@@ -325,18 +272,6 @@ function eliminarElemento(id){
 	}
 }
 
-function anadirElemento(id){
-	var newdiv=document.createElement("div");
-	var newtext=document.createTextNode("Label div :");
-	var aTextBox=document.createElement('input');
-	aTextBox.type = 'text';
-	aTextBox.value = 'Input Element';
-	aTextBox.id = 'txt_cell_two_';
-	newdiv.appendChild(newtext); //append text to new div
-	newdiv.appendChild(aTextBox); //append text to new div
-	document.getElementById("test").appendChild(newdiv); //append new div to another
-}
-
 function crearmapa(valor){
 	tipobusqueda=valor;
 	conseguirdatos();
@@ -345,6 +280,7 @@ function crearmapa(valor){
 
 function initialize(){
 	geocoder = new google.maps.Geocoder();
+	infowindow = new google.maps.InfoWindow();
 	var latlng = new google.maps.LatLng(0,0);
 	var myOptions = {
 		zoom: 1,
@@ -355,15 +291,34 @@ function initialize(){
 }
 
 function addMarker(posicion, titulo){
-	new google.maps.Marker({
+	var marker = new google.maps.Marker({
 		position: posicion,
         	map: map,
-        	draggable:true,
+        	draggable:false,
       		animation: google.maps.Animation.DROP,
         	title: titulo
 	});
+	
+	infoMarker(marker, titulo);
 }
 
+function infoMarker(marker, info){
+	var newlatlng = new google.maps.LatLng(marker.getPosition().lat()+5, marker.getPosition().lng());
+	var div = document.getElementById(info);
+		
+	google.maps.event.addListener(marker, 'click', function(){
+		infowindow.setContent(info); 
+		map.setCenter(newlatlng);
+		infowindow.open(marker.get('map'), marker);	
+	});
+	
+	
+	google.maps.event.addDomListener(div, 'click', function(){
+		infowindow.setContent(info); 
+		map.setCenter(newlatlng);
+		infowindow.open(marker.get('map'), marker);
+	});
+}
 
 function codeAddress(direccion1, direccion2){
 	var segunda_direccion=false;
@@ -388,8 +343,7 @@ function codeAddress(direccion1, direccion2){
 		}
 	});
 	}
-}//Fin de funcion
-
+}
 
 function toggleBounce() {
 
@@ -400,104 +354,132 @@ function toggleBounce() {
     }
 }
 
-//En esta funcion se nos agregaran los grupos favoritos.
-//Esta funcion se disparará al pulsar el boton "guardar grupo".
+function comprobarBanda(){
+	var nombre_banda=$('#nombre_banda').text();
+	if(array_misgrupos.indexOf(nombre_banda) != -1){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+function actualizarDatos(){
+    	if(comprobarBanda()){
+    		$("#boton_fav").unbind('click');
+		$("#boton_fav").click(function(){eliminarfavorito();});
+		$("#boton_fav").attr({'value': 'E'});
+	}
+	else{
+		$("#boton_fav").unbind('click');
+		$("#boton_fav").click(function(){guardarfavoritos();});
+		$("#boton_fav").attr({'value': 'A'});
+	}
+}
+
+function actualizarDatosInd(){
+	
+	$('.boton_fav_ind').each(function(){
+		var nombre = $(this).attr("name");
+		$('#nombre_banda').unbind('text');
+		//$('#nombre_banda').text(nombre); //PARA QUE FUNCIONE TODO EL CÓDIGO SOLO HAY QUE HACER QUE LA ETIQUETA NOMBRE_BANDA TOME EN SU CAMPO TEXTO EL VALOR NOMBRE, PERO EN VEZ DE HACERLO SE QUEDA EN BLANCO :(
+		//alert($('#nombre_banda').text());
+		if(comprobarBanda()){
+			$(this).unbind('click');
+			$(this).click(function(){eliminarfavorito();});
+			$(this).attr({'value': 'E'});
+		}
+		else{
+			$(this).unbind('click');
+			$(this).click(function(){guardarfavoritos();});
+			$(this).attr({'value': 'A'});
+		}
+	});
+}
+
+function leergrupos(){
+	var string_grupos;
+	$.couch.session({
+		success : 
+			function(session) {
+				var userCtx = session.userCtx;
+				$.couch.userDb(function(db){
+					var userDocId = "org.couchdb.user:"+userCtx.name;
+					db.openDoc(userDocId, {
+						success : 
+							function(userDoc){
+								string_grupos=userDoc.grupos;
+								if(string_grupos != null){
+									array_misgrupos = string_grupos.split(',');	
+								}
+								else{
+									array_misgrupos = [];
+								}
+			                		}
+					});
+				});
+			}
+	});
+}
+
 function guardarfavoritos(){
-	//Lo primero, sacar el grupo a guardar.
-	var salvame=$('h2').text();
-	var k=0;
-	//Ahora, una vez nos hemos asegurado que esta el grupo, entramos a la parte del manejo de usuarios.
+	var nombre_banda=$('#nombre_banda').text();
+	array_misgrupos.push(nombre_banda);		
+	var string_grupos = array_misgrupos.join(",");
 	
 	$.couch.session({
-                success : function(session) {
-                   var userCtx = session.userCtx;
-		   $.couch.userDb(function(db) {
-                   var userDocId = "org.couchdb.user:"+userCtx.name;
-		   //Abrimos el documento del usuario elegido 
-        	   db.openDoc(userDocId, {success : function(userDoc) {
-                   misgrupos=userDoc.grupos;
-		   array = misgrupos.split(',');
-		   //Comprobamos si el grupo que vamos a guardar está en la base de datos.
-		   for(var m in array ){
-			if (array[m]==salvame){
-				alert("Grupo guardado anteriormente.Revise favoritos.");
-				k=1;
-			}//Fin del if.
-		   }//Fin del for.
-		   if(k==0){
-		   	//En caso de que no exista, procedemos a guardarlo.
-		   	array.push(salvame);
-		   	//Creamos una cadena de caracteres.
-		   	var guardar = array.join(",");
-		   	//alert(guardar);Tutto bene
-		  	userDoc["grupos"] = guardar;
-                   	db.saveDoc(userDoc, {success : function() {
-				alert("Grupo agregado a favoritos");
-                    }
-                   });
-		  }//FIn del if.
-                }//Fin del function dentro del succes.
-              });//Fin del succes
-            });//FIn de userdB
-         }//FIn del succes de session
-      });//fin del couch session
-}//End of function
+		success:
+			function(session) {
+				var userCtx = session.userCtx;
+				$.couch.userDb(function(db){
+					var userDocId = "org.couchdb.user:"+userCtx.name;
+					db.openDoc(userDocId, {
+						success:
+							function(userDoc){
+								userDoc["grupos"] = string_grupos;
+								db.saveDoc(userDoc, {
+									success: 
+										function(){
+											actualizarDatos();
+											actualizarDatosInd();
+										}
+								});
+							}
+					});
+				});
+			}
+	});
+}
 
-
-//Funcion que nos permite borrar a los grupos correspondientes.
 function eliminarfavorito(){
-	//Lo primero, obtenemos el grupo que vamos a borrar.
-	var borrame=$('#borrar').val();
-	if (borrame == null || borrame ==""){
-		alert("Introduzca por favor un grupo");
-		return;
-	}else{
-	//Como se habran leido los campos, el array ya estará instanciado.
-	var aux=0;
-	//Ahora, una vez nos hemos asegurado que esta el grupo, entramos a la parte del manejo de usuarios.
+	var nombre_banda=$('#nombre_banda').text();
+	var ind = array_misgrupos.indexOf(nombre_banda);
+	array_misgrupos.splice(ind, 1);		
+	var string_grupos = array_misgrupos.join(",");
+
 	$.couch.session({
-                success : function(session) {
-                   var userCtx = session.userCtx;
-		   $.couch.userDb(function(db) {
-                   var userDocId = "org.couchdb.user:"+userCtx.name;
-		   //Abrimos el documento del usuario elegido 
-        	   db.openDoc(userDocId, {success : function(userDoc) {
-                   misgrupos=userDoc.grupos;
-		   array = misgrupos.split(',');
-		   //Comprobamos si el grupo que vamos a guardar está en la base de datos.
-		   for(var m in array ){
-			if (array[m]==borrame){
-				//alert("Se ha encontrado el grupo");
-				aux=1;
-			}//Fin del if.
-		   }//Fin del for.
-		   if(aux==1){
-		   	//En caso de que exista, se borrará
-			var id=array.indexOf(borrame);
-			if (id !=-1){
-				array.splice(id,1);
-			}//FIn de este if
-		   	//Creamos una cadena de caracteres con el array bien dimensionado
-		   	var guardar = array.join(",");
-		   	//alert(guardar);Tutto bene
-		  	userDoc["grupos"] = guardar;
-                   	db.saveDoc(userDoc, {success : function() {
-				alert("Grupo borrado correctamente");
-				//Aqui, volvemos a llamar a leer los grupos para que se actualize el HTML
-				leergrupos();
-                    }
-                   });
-		  }//FIn del primer if.
- 		 if(aux==0){
-			alert("El grupo no existe en favoritos");
-		 }//FIn del segundo if
-                }//Fin del function dentro del succes.
-              });//Fin del succes
-            });//FIn de userdB
-         }//FIn del succes de session
-      });//fin del couch session
-   }//Fin el else
-}//End of function
+		success:
+			function(session){
+				var userCtx = session.userCtx;
+				$.couch.userDb(function(db){
+					var userDocId = "org.couchdb.user:"+userCtx.name;
+					db.openDoc(userDocId, {
+						success: 
+							function(userDoc){
+								userDoc["grupos"] = string_grupos;
+								db.saveDoc(userDoc, {
+									success:
+										function(){
+											actualizarDatos();
+											actualizarDatosInd();
+										}
+								});
+							}
+					});
+           			});
+         		}
+	});
+}
 
 
 /*
@@ -567,30 +549,3 @@ function pasonosotros()
 }//Fin de funcion
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
