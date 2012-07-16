@@ -475,14 +475,39 @@ h1{
 p{
 	margin-left: 10%;
 	font-weight: bold;
-	color: green;
-	/*border-color: rgb(13,186,85);*/
+	color: blue;
+	border-color: rgb(13,186,85);
+	background-color:rgb(255,255,255);
 }
+
+p.letraka{
+	margin-left: 5%;
+	font-weight: bold;
+	color: black;
+	font-size: 15px;
+	background-color: rgb(159,159,159);
+	text-align:justify;
+        margin-right:2%;
+}
+
+.scroll-s{
+	position: relative; 
+	width:95%;
+	height:70%;
+	background-color: rgb(159,159,159);
+	overflow:auto;
+}
+
+
+
+
+
+
 
 #cabecera_api{
 	position: relative;
 	margin-left: 5%;
 	width:90%;
 	height: 15%;
-	background-color: rgb(13,186,85);
+	/*background-color: rgb(13,186,85);*/
 }
