@@ -16,7 +16,25 @@
 
 	var templates = {
         	adminParty : '<p><strong>Admin party, everyone is admin!</strong> Fix this in <a href="/_utils/index.html">Futon</a> before proceeding.</p>',
-		loggedOut : '<div id="marco1"> <img id="imagen_login" src="Images/concierto.jpg"> <div id="marco2"> <form class="login" class="marco_index"><fieldset>	<legend>Log in</legend>	<input class="estilo_input text_input" type="text" autocorrect="off" autocapitalize="off" placeholder="Nombre" value="" name="name"><br>	<input class="estilo_input text_input" type="password" placeholder="contraseña" value="" name="password"><br>	<input  class="estilo_boton text_boton" title="ok" type="submit" value="Login">	<span id="mensaje_login"></span></fieldset></form>	<form class="signup" class="marco_index"><fieldset><legend>Sign up</legend>	<input class="estilo_input text_input" type="text" autocorrect="off" autocapitalize="off" placeholder="Introduce un nombre" value="" name="name"><br>	<input class="estilo_input text_input" type="password" placeholder="Password" value="" name="password"><br><input  class="estilo_boton text_boton" title="ok" type="submit" value="Signup"><br></fieldset></form></div></div>',
+		loggedOut : 	'<div id="marco1"> <img id="imagen_login" src="Images/concierto.jpg">' +
+					'<div id="marco2">'+
+						'<form class="login" class="marco_index">'+
+							'<fieldset><legend>Log in</legend>'+
+							'<input class="estilo_input text_input" type="text" autocorrect="off" autocapitalize="off" placeholder="Nombre" value="" name="name"><br>'+
+							'<input class="estilo_input text_input" type="password" placeholder="contraseña" value="" name="password"><br>'+
+							'<input  class="estilo_boton text_boton" title="ok" type="submit" value="Login">'+
+							'<span id="mensaje_login"></span></fieldset>'+
+						'</form>'+
+						'<form class="signup" class="marco_index">'+
+							'<fieldset><legend>Sign up</legend>'+
+							'<input class="estilo_input text_input" type="text" autocorrect="off" autocapitalize="off" placeholder="Introduce un nombre" value="" name="name"><br>'+
+							'<input class="estilo_input text_input" type="password" placeholder="Password" value="" name="password"><br>'+
+							'<input  class="estilo_boton text_boton" title="ok" type="submit" value="Signup">'+
+							'<span id="mensaje_reg"></span></fieldset>'+
+						'</form>'+
+					'</div>'+
+				'</div>',
+		
 		loginForm : '<form class="login"><label for="name">Name</label> <input type="text" name="name" value="" autocapitalize="off" autocorrect="off"><label for="password">Password</label> <input type="password" name="password" value=""><input type="submit" value="Login"><a href="#signup">or Signup</a></form>',
 		signupForm : '<form class="signup"><label for="name">Name</label> <input type="text" name="name" value="" autocapitalize="off" autocorrect="off"><label for="password">Password</label> <input type="password" name="password" value=""><input type="submit" value="Signup"><a href="#login">or Login</a></form>'
 	};
@@ -55,8 +73,8 @@
 				password:pass,	
 				success:initWidget, 
 				error: function(){
-					$("#mensaje_login").html("Te has equivocado :(");
-					$("#mensaje_login").show();
+				$("#mensaje_login").html("Te has equivocado :(");
+				$("#mensaje_login").show();
 				}
 			}); 
 			
@@ -89,7 +107,11 @@
 			var name = $('input[name="name"]', this).val(),  
 			pass = $('input[name="password"]', this).val();
 			$.couch.signup({name : name}, pass, {
-				success : function() {doLogin(name, pass)}
+				success : function() {doLogin(name, pass)},
+				error: function(){
+					$("#mensaje_reg").html("Nombre ya utilizado :(");
+					$("#mensaje_reg").show();
+				}
 			});
 			return false;      
 		});
@@ -98,11 +120,10 @@
 		/*$("#info").html('<div id="account"><span>' + uri_name + ' </a>| <a href="#logout">Logout?</a></span></div>');*/
 		var auth_db = encodeURIComponent(r.info.authentication_db)
 			, uri_name = encodeURIComponent(r.userCtx.name)
-			, span = $('<span id="usuarios">' + uri_name + ' </a>| <a href="#logout">Logout?</a></span>');
-			//posible botón para salir, pero da error
-			//<input type="submit" class="estilo_boton text_boton" value="Logout" onclick="#logout"></span>'); //
+			, span = $('<span id="usuarios">' + uri_name + ' </a>| <a href="#logout" class="estilo_boton text_boton boton_logout">Logout</a></span>');
 		$('a.name', span).text(r.userCtx.name); // you can get the user name here
 		$("#mensaje_login").hide();
+		$("#mensaje_reg").hide();
 		
 		return span;
     	}

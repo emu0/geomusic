@@ -27,7 +27,6 @@ body {
 	text-align: center; 
 	font-family: 'Times New Roman',Times,serif; 
 	font-size: 1.6em; 
-	font-style: oblique; 
 	font-weight: bold; 
 	line-height: 1.4em; 
 	color: white;
@@ -65,7 +64,6 @@ body {
 	height: 20px;
 	line-height: 20px;
 	text-decoration: none;
-	/*color: rgb(9,139,63);*/
 	text-shadow: #870802 0 1px 0;
 	height:80%;
 	width:100%;
@@ -104,8 +102,11 @@ body {
 #mensaje_login{
 	color: red;
 	font-size: 12px; 
+}
 
-
+#mensaje_reg{
+	color: red;
+	font-size: 12px; 
 }
 
 #imagen_login{
@@ -218,7 +219,10 @@ body {
 	float: left;
 	margin-left: 3px;
 	margin-top: 3px;
+}
 
+#boton_recargar{
+	margin-left:5%;
 }
 
 #nombre_tabla {
@@ -235,18 +239,16 @@ body {
 }
 
 #boton_fav{
-	background: url('Images/starnofav.png') no-repeat;
-	border:solid 1px; 
+	border:none; 
 	width:25px; 
 	height:25px: 
 
 }
 
 .boton_fav_ind{
-	background: url('Images/starnofav.png') no-repeat;
-	border:solid 1px; 
-	width:25px; 
-	height:25px: 
+	border:none; 
+	width:15px; 
+	height:15px: 
 
 }
 
@@ -308,7 +310,7 @@ body {
 }
 
 .link_nav:hover{
-	color: black;
+	color: white;
 }
 
 .marco_index{
@@ -326,10 +328,10 @@ body {
 .estilo_boton{
 	color:rgb(255, 255, 255);
 	text-shadow: 0pt -1px 0pt rgba(0,0,0,0.25);
-	background-color: rgb(13,186,85);
+	background-color: rgb(1,94,7);
 	background-repeat: repeat-x;
-	background-image: -moz-linear-gradient(top, rgb(25,150,30), rgb(9,139,63));
-	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(13,186,85)), to(rgb(9,139,63)));
+	background-image: -moz-linear-gradient(top, rgb(1,94,7), rgb(3,108,10));
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgb(1,94,7)), to(rgb(3,108,10)));
 	border: 1px;
 	border-color: rgb(13,186,85);
 	margin-left: 2px;
@@ -342,6 +344,12 @@ body {
 	font-weight: bold;
 	line-height: 17px;
 	height: 24px;
+}
+
+.boton_logout{	
+	font-size: 15px;
+	padding: 5px;
+	margin-right: 10px;
 }
 
 .estilo_boton:hover{
@@ -440,12 +448,12 @@ ul {
 /*CSS que se utiliza para la cabecera*/
 a{
 	text-decoration :none;
-	color: white;
+	color: black;
 }
 
 a:hover{
 	text-decoration :none;
-	color: black;
+	color: grey;
 }
 
 
