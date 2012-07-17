@@ -497,13 +497,6 @@ p.letraka{
 	background-color: rgb(159,159,159);
 	overflow:auto;
 }
-
-
-
-
-
-
-
 #cabecera_api{
 	position: relative;
 	margin-left: 5%;
@@ -511,3 +504,15 @@ p.letraka{
 	height: 15%;
 	/*background-color: rgb(13,186,85);*/
 }
+
+#wahan{
+	margin-top: 10%;
+	font-weight: bold;
+	font-size: 20px;
+	color: rgb(255,255,255);
+
+}
+
+
+
+
