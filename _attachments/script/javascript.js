@@ -1,8 +1,4 @@
 /**
-***LEER TODOS LOS COMENTARIOS ANTES DE MODIFICAR NADA, QUE LUEGO SE LÍA***
-
-*COSAS QUE QUEDAN POR HACER:
- HAY QUE ENGANCHAR EL PIE DE PÁGINA CON LA INFORMACIÓN, HE PENSADO QUE EN VEZ DE HACER UN PDF PODEMOS COLGAR TODA LA INFORMACIÓN EN "SOBRE GEOMUSIC Y NOSOTROS"
 
 *COSAS QUE SE PODRÍAN MEJORAR:
  LA COMPROBACIÓN DE CAMPOS DEL REGISTRO PODRÍA SER ALGO INTERESANTE DE HACER.
@@ -10,8 +6,6 @@
  LOS ESTILOS Y COLORES DE ALGUNOS ENLACES.
  ALETOREIDAD DE LAS DIFERENTES IMAGENES.
 
-*COSAS QUE MEJOR NO TOCAR:
- LOS TAMAÑOS Y DISTRIBUCIÓN DE ELEMENTOS EN EL CSS
 **/
 
 /** 
@@ -267,7 +261,7 @@ function pasoaseleccion(){
 *  Función de modifica el DOM para mostrar el menú de información
 **/
 function pasonosotros(){
-
+	var sole=0;
 	if (document.getElementById('marcos')){
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
@@ -278,52 +272,55 @@ function pasonosotros(){
 	}else if (document.getElementById('cabecera_api')){
 	   eliminarElemento('cabecera_api');
 	   eliminarElemento('contenido_api');
-	}/*else if (document.getElementById('marco1')){
-	   eliminarElemento('marco1');
-	}*/else{
+	}else if (document.getElementById('marco1')){
+	   sole=1;
+	   $("#wahan").html("Necesitas registrarse ;)");
+	   $("#wahan").show();
+	   setTimeout(function() { $("#wahan").hide(); }, 2000);
+
+	}else{
 	   return;
         }
-	
+	if(sole==0){
 
+		var newdiv1=document.createElement("div");
 
-	var newdiv1=document.createElement("div");
+		var newdiv2=document.createElement("div");
 
-	var newdiv2=document.createElement("div");
+		var newh2=document.createElement("h1");
 
-	var newh2=document.createElement("h1");
+		var newh3a=document.createElement("h3");
+		var newh3b=document.createElement("h3");
+		var newh3c=document.createElement("h3");
+		var newh3d=document.createElement("h3");
+		var newh3e=document.createElement("h3");
 
-	var newh3a=document.createElement("h3");
-	var newh3b=document.createElement("h3");
-	var newh3c=document.createElement("h3");
-	var newh3d=document.createElement("h3");
-	var newh3e=document.createElement("h3");
+		var newpa=document.createElement("p");
+		var newpb=document.createElement("p");
+		var newpc=document.createElement("p");
+		var newpd=document.createElement("p");
+		var newpe=document.createElement("p");
 
-	var newpa=document.createElement("p");
-	var newpb=document.createElement("p");
-	var newpc=document.createElement("p");
-	var newpd=document.createElement("p");
-	var newpe=document.createElement("p");
-
-	newdiv1.id ='cabecera_api';
-	newdiv2.id='contenido_api';
-	newdiv2.className= 'scroll-s';
+		newdiv1.id ='cabecera_api';
+		newdiv2.id='contenido_api';
+		newdiv2.className= 'scroll-s';
 		
-	newpa.className = 'letraka';
-	newpb.className = 'letraka';
-	newpc.className = 'letraka';
-	newpd.className = 'letraka';
-	newpe.className = 'letraka';
+		newpa.className = 'letraka';
+		newpb.className = 'letraka';
+		newpc.className = 'letraka';
+		newpd.className = 'letraka';
+		newpe.className = 'letraka';
 
-	newh2.innerHTML='Todo sobre nosotros ;)';
+		newh2.innerHTML='Todo sobre nosotros ;)';
 
-	newdiv1.appendChild(newh2);
+		newdiv1.appendChild(newh2);
 
-	document.getElementById("profile").appendChild(newdiv1);
+		document.getElementById("profile").appendChild(newdiv1);
 
-	newh3a.innerHTML='Hito 1';
-	newh3b.innerHTML='Hito 2';
-	newh3c.innerHTML='Hito 3';
-	newh3d.innerHTML='Hito 4';
+		newh3a.innerHTML='Hito 1';
+		newh3b.innerHTML='Hito 2';
+		newh3c.innerHTML='Hito 3';
+		newh3d.innerHTML='Hito 4';
 
 	//Aqui se describen los hitos
 	newpa.innerHTML='En este primer hito, creamos el grupo de programacion formado por Angel, Emilio y Sole. Pensamos la idea que luego se convirtio en el proyecto llevado a cabo: GEOMUSIC, un proyecto de geolocalizacion, en el cual se buscan grupos de musica como tal o grupos de musica por localidades y se gestionan desde un perfil propio, pudiendo guardar los grupos que nos interesan a traves de una interfaz amena e intuitiva. Por ultimo, para terminar este hito, creamos una carpeta en la forja con el nombre del proyecto.';
@@ -345,14 +342,16 @@ function pasonosotros(){
 	newdiv2.appendChild(newh3d);
 
 	document.getElementById("profile").appendChild(newdiv2);
-
+}else{
+	return;
+}
 }//Fin de metodo
 
 /**
 *  Función de modifica el DOM para mostrar el menú de la API
 **/
 function pasoapi(){
-
+	var angel=0;
 	if (document.getElementById('marcos')){
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
@@ -363,61 +362,223 @@ function pasoapi(){
 	}else if (document.getElementById('cabecera_api')){
 	   eliminarElemento('cabecera_api');
 	   eliminarElemento('contenido_api');
+	}else if (document.getElementById('marco1')){
+	   angel=1;
+	   $("#wahan").html("Necesitas registrarse ;)");
+	   $("#wahan").show();
+	   setTimeout(function() { $("#wahan").hide(); }, 2000);
+
 	}else{
 	   return;
         }
+	if(angel=='0'){
 
-	var newdiv1=document.createElement("div");
-	var newdiv2=document.createElement("div");
+		var array1=new Array(26);	
+		var array2=new Array(26);
+		var array3=new Array(26);
+		var array4=new Array(26);
+			
+		var newdiv1=document.createElement("div");
 
-	var newh2=document.createElement("h1");
+		var newdiv2=document.createElement("div");
 
-	var newh3a=document.createElement("h3");
-	var newh3b=document.createElement("h3");
-	var newh3c=document.createElement("h3");
-	var newh3d=document.createElement("h3");
-	
-	var newpa=document.createElement("p");
-	var newpb=document.createElement("p");
-	var newpc=document.createElement("p");
-	var newpd=document.createElement("p");
+		var newh2=document.createElement("h1");
+		// 23
+		var newh3a=document.createElement("h3");
+		var newh3b=document.createElement("h3");
+		var newh3c=document.createElement("h3");
+		var newh3d=document.createElement("h3");
+		var newh3e=document.createElement("h3");
+		var newh3f=document.createElement("h3");
+		var newh3g=document.createElement("h3");
+		var newh3h=document.createElement("h3");
+		var newh3i=document.createElement("h3");
+		var newh3j=document.createElement("h3");
+		var newh3k=document.createElement("h3");
+		var newh3l=document.createElement("h3");
+		var newh3m=document.createElement("h3");
+		var newh3n=document.createElement("h3");
+		var newh3o=document.createElement("h3");
+		var newh3p=document.createElement("h3");
+		var newh3q=document.createElement("h3");
+		var newh3r=document.createElement("h3");
+		var newh3s=document.createElement("h3");
+		var newh3t=document.createElement("h3");
+		var newh3u=document.createElement("h3");
+		var newh3v=document.createElement("h3");
+		var newh3w=document.createElement("h3");
 
-	newdiv1.id ='cabecera_api';
-	newdiv2.id='contenido_api';
-		
-	newpa.className = 'estilo_marco';
-	newpb.className = 'estilo_marco';
-	newpc.className= 'estilo_marco';
-	newpd.className= 'estilo_marco';
 
-	newh2.innerHTML='API Methods';
-	newdiv1.appendChild(newh2);
-	document.getElementById("profile").appendChild(newdiv1);
+		var newpa=document.createElement("p");
+		var newpb=document.createElement("p");
+		var newpc=document.createElement("p");
+		var newpd=document.createElement("p");
+		var newpe=document.createElement("p");
+		var newpf=document.createElement("p");
+		var newpg=document.createElement("p");
+		var newph=document.createElement("p");
+		var newpi=document.createElement("p");
+		var newpj=document.createElement("p");
+		var newpk=document.createElement("p");
+		var newpl=document.createElement("p");
+		var newpm=document.createElement("p");
+		var newpn=document.createElement("p");
+		var newpo=document.createElement("p");
+		var newpp=document.createElement("p");
+		var newpq=document.createElement("p");
+		var newpr=document.createElement("p");
+		var newps=document.createElement("p");
+		var newpt=document.createElement("p");
+		var newpu=document.createElement("p");
+		var newpv=document.createElement("p");
+		var newpw=document.createElement("p");
 
-	newh3a.innerHTML='api1';
-	newh3b.innerHTML='api2';
-	newh3c.innerHTML='api3';
-	newh3d.innerHTML='api4';
 
-	newpa.innerHTML='descripcion1';
-	newpb.innerHTML='descripcion2';
-	newpc.innerHTML='descripcion3';
-	newpd.innerHTML='descripcion4';
-	
-	newh3a.appendChild(newpa);
-	newh3b.appendChild(newpb);
-	newh3c.appendChild(newpc);
-	newh3d.appendChild(newpd);
 
-	newdiv2.appendChild(newh3a);
-	newdiv2.appendChild(newh3b);
-	newdiv2.appendChild(newh3c);
-	newdiv2.appendChild(newh3d);
+		newdiv1.id ='cabecera_api';
+		newdiv2.id='contenido_api';
+		newdiv2.className= 'scroll-s';
+
+		newpa.className = 'letraka';
+		newpb.className = 'letraka';
+		newpc.className = 'letraka';
+		newpd.className = 'letraka';
+		newpe.className = 'letraka';
+		newpf.className = 'letraka';
+		newpg.className = 'letraka';
+		newph.className = 'letraka';
+		newpi.className = 'letraka';
+		newpj.className = 'letraka';
+		newpk.className = 'letraka';
+		newpl.className = 'letraka';
+		newpm.className = 'letraka';
+		newpn.className = 'letraka';
+		newpo.className = 'letraka';
+		newpp.className = 'letraka';
+		newpq.className = 'letraka';
+		newpr.className = 'letraka';
+		newps.className = 'letraka';
+		newpt.className = 'letraka';
+		newpu.className = 'letraka';
+		newpv.className = 'letraka';
+		newpw.className = 'letraka';
+
+		newh2.innerHTML='Api de Geomusic.';
+
+		newdiv1.appendChild(newh2);
+
+		document.getElementById("profile").appendChild(newdiv1);
+
+		newh3a.innerHTML='initialize()';
+		newh3b.innerHTML='crearMapa() , parametros: valor';
+		newh3c.innerHTML='pasoamapa()';
+		newh3d.innerHTML='pasoperfil()';
+		newh3e.innerHTML='pasoaseleccion()';
+		newh3f.innerHTML='pasonosotros()';
+		newh3g.innerHTML='pasoapi()';
+		newh3h.innerHTML='conseguirdatos() , parametros: fuente, tipo.';
+		newh3i.innerHTML='getInfo() , parametros: url';
+		newh3j.innerHTML='procesarRespuesta()';
+		newh3k.innerHTML='ponerResutados() , parametros: geoArray, nombreArray, fechaArray, lugarArray, direccionArray, websiteArray';
+		newh3l.innerHTML='evento() , parametros: nombre, tipo';
+		newh3m.innerHTML='eliminarElemento() , parametros: id';
+		newh3n.innerHTML='addMarker() , parametros: posicion, titulo, fecha, lugar, direccion, website';
+
+		newh3o.innerHTML='infoMarker() , parametros: posicion, titulo, fecha, lugar, direccion, website';
+		newh3p.innerHTML='codeAddress() , parametros: direccion1, direccion2';
+		newh3q.innerHTML='toggleBounce()';
+		newh3r.innerHTML='leergrupos()';
+		newh3s.innerHTML='guardarfavoritos() , parametros: nombre';
+		newh3t.innerHTML='eliminarfavoritos() , parametros: nombre';
+		newh3u.innerHTML='comprobarElemento() , parametros: nombre, tipo';
+		newh3v.innerHTML='actualizarDatos()'; 
+		newh3w.innerHTML='actualizarDatosInd()'; 
+
+	//Aqui se describen los hitos
+
+		newpa.innerHTML = 'Inicializa el mapa de Google';
+		newpb.innerHTML = 'Crea mapa en funcion del tipo de busqueda que queremos hacer';
+		newpc.innerHTML = 'Modifica el DOM para mostrar el HTML de los resultados de mapas y de la tabla con sus busquedas';
+		newpd.innerHTML = 'Nos permite acceder a los grupos favoritos en HTML';
+		newpe.innerHTML = 'Nos permite acceder a la pantalla de los mapas';
+		newpf.innerHTML = 'Nos permite acceder a la informacion de los hitos';
+		newpg.innerHTML = 'Nos permite acceder a la pagina de la API';
+		newph.innerHTML = 'Monta el enlace para realizar la peticion REST al api de LastFM';
+		newpi.innerHTML = 'Realiza la peticion REST al enlace pasado por referencia';
+		newpj.innerHTML = 'Recibe el XML de la peticion REST y obtiene la informacion que necesitamos';
+		newpk.innerHTML = 'Pone informacion en el mapa y/o en la tabla de resultados';
+		newpl.innerHTML = 'Añade evento de click en el DOM';
+		newpm.innerHTML = 'Elimina un elemento del DOM.';
+		newpn.innerHTML = 'Añade un marcador en el mapa.';
+		newpo.innerHTML = 'Crea una ventana de informacion y gestiona los elementos del mapa';
+		newpp.innerHTML = 'Codifica los parametros recibido en latitud y longitud';
+		newpq.innerHTML = 'Modifica la animacion de un marcador';
+		newpr.innerHTML = 'Lee los grupos que tenemos almacenados en favoritos';
+		newps.innerHTML = 'Guarda el grupo recibido en favoritos';
+		newpt.innerHTML = 'Elimina el grupo deseado de favoritos';
+		newpu.innerHTML = 'Función que comprueba si una banda está en el Array de las bandas';
+		newpv.innerHTML = 'Nos permite actualizar los datos en la base de datos';
+		newpw.innerHTML = 'Actualiza los datos desde el menu usuario';
+
+
+		newh3a.appendChild(newpa);
+		newh3b.appendChild(newpb);
+		newh3c.appendChild(newpc);
+		newh3d.appendChild(newpd);
+
+		newh3e.appendChild(newpe);
+		newh3f.appendChild(newpf);
+		newh3g.appendChild(newpg);
+		newh3h.appendChild(newph);
+		newh3i.appendChild(newpi);
+		newh3j.appendChild(newpj);
+		newh3k.appendChild(newpk);
+		newh3l.appendChild(newpl);
+		newh3m.appendChild(newpm);
+		newh3n.appendChild(newpn);
+		newh3o.appendChild(newpo);
+		newh3p.appendChild(newpp);
+		newh3q.appendChild(newpq);
+		newh3r.appendChild(newpr);
+		newh3s.appendChild(newps);
+		newh3t.appendChild(newpt);
+		newh3u.appendChild(newpu);
+		newh3v.appendChild(newpv);
+		newh3w.appendChild(newpw);
+
+		newdiv2.appendChild(newh3a);
+		newdiv2.appendChild(newh3b);
+		newdiv2.appendChild(newh3c);
+		newdiv2.appendChild(newh3d);
+
+		newdiv2.appendChild(newh3e);
+		newdiv2.appendChild(newh3f);
+		newdiv2.appendChild(newh3g);
+		newdiv2.appendChild(newh3h);
+		newdiv2.appendChild(newh3i);
+		newdiv2.appendChild(newh3j);
+		newdiv2.appendChild(newh3k);
+		newdiv2.appendChild(newh3l);
+		newdiv2.appendChild(newh3m);
+		newdiv2.appendChild(newh3n);
+		newdiv2.appendChild(newh3o);
+		newdiv2.appendChild(newh3p);
+		newdiv2.appendChild(newh3q);
+		newdiv2.appendChild(newh3r);
+		newdiv2.appendChild(newh3s);
+		newdiv2.appendChild(newh3t);
+		newdiv2.appendChild(newh3u);
+		newdiv2.appendChild(newh3v);
+		newdiv2.appendChild(newh3w);
 
 	document.getElementById("profile").appendChild(newdiv2);
 
-}//FIn de funcion
 
+}else{
+	return;
+}
+
+}//FIn de funcion
 /**
 * Función que monta el enlace para realizar la petición REST al API del lastfm
 **/
@@ -476,7 +637,7 @@ function getInfo(url){
 }
 
 /**
-* Función que recibe el XML de la petición REST y saca, modifica y moldea la iformación que nos interesa
+* Función que recibe el XML de la petición REST y saca, modifica y moldea la información que nos interesa
 **/
 function procesarRespuesta(){
 	//Ya se puede ocultar el spinner
