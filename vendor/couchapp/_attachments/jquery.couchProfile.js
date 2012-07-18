@@ -16,7 +16,7 @@
 	$.couchProfile = {};
 	$.couchProfile.templates = {
 		profileReady : '<div class="avatar">{{#gravatar_url}}<img src="{{gravatar_url}}"/>{{/gravatar_url}}<div class="name">{{nickname}}</div></div><p>Hello {{nickname}}!</p><div style="clear:left;"></div>',
-		newProfile : '<form><p>Hola {{name}} !, para terminar de registrarte, debes rellenar estos campos obligatorios y pulsar go!</p><input class="estilo_input text_input" type="text" name="nickname" placeholder="nickname" value="">&nbsp&nbsp<div id="shogun"></div><br> <input class="estilo_input text_input" type="text" name="email" placeholder="email" value="">&nbsp&nbsp<div id="lao"></div><br><input id="go" class="estilo_boton text_boton" type="submit" value="go! &rarr;"><input type="hidden" name="userCtxName" value="{{name}}" id="userCtxName"></form><img id="map_canvas" class="estilo_marco" src="Images/concierto5.jpg">'
+		newProfile : '<form><div id="entrada"><p>Hola {{name}} !, para terminar de registrarte, debes rellenar estos campos obligatorios y pulsar go!</p><input class="estilo_input text_input" type="text" name="nickname" placeholder="nickname" value="">&nbsp&nbsp<div id="shogun"></div><br> <input class="estilo_input text_input" type="text" name="email" placeholder="email" value="">&nbsp&nbsp<div id="lao"></div><br><br><input type=checkbox name="hombre" value="true" class="hombre">Hombre <input type=checkbox name="mujer" value="true" class="mujer"> Mujer <br><br><div id="engendro"></div><input id="go" class="estilo_boton text_boton" type="submit" value="go! &rarr;"><input type="hidden" name="userCtxName" value="{{name}}" id="userCtxName"></div></form>'
 	};
     
 	$.fn.couchProfile = function(session, opts) {
@@ -55,8 +55,18 @@
 				var userDocId = "org.couchdb.user:"+userCtx.name;
 				db.openDoc(userDocId, {
 					success : function(userDoc) {
+						var fecha=new Date();				
+						var dia="Cuenta creada el: "+fecha.getDate()+"/"+(fecha.getMonth()+1)+"/"+fecha.getFullYear()+" a las "+fecha.getHours()+":"+fecha.getMinutes();
+						if($(".hombre").is(":checked")){
+							var sex=$(".hombre").attr('name');
+						}else{
+							var sex=$(".mujer").attr('name');
+						}
+						//alert(dia);
 						userDoc["profile"] = newProfile;
 						userDoc["grupos"] = null;
+						userDoc["tiempo"] = dia;
+						userDoc["sexo"]=sex;			
 						db.saveDoc(userDoc, {
 							success : function() {
 								newProfile.name = userDoc.name;
@@ -98,6 +108,16 @@
 					$("#lao").html("El email introducido no es valido");
 	 	     		        $("#lao").show();
 	   				setTimeout(function() { $("#lao").hide(); }, 1500);
+				}else if($(".hombre").is(":checked") && $(".mujer").is(":checked")){
+					tuttobene=1;
+					$("#engendro").html("No se puede ser hombre y mujer a la vez, no? ");
+	 	     		        $("#engendro").show();
+	   				setTimeout(function() { $("#engendro").hide(); }, 1500);
+				}else if(!$(".hombre").is(":checked") && !$(".mujer").is(":checked")){
+					tuttobene=1;
+					$("#engendro").html("Dime si eres hombre o mujer,anda ");
+	 	     		        $("#engendro").show();
+	   				setTimeout(function() { $("#engendro").hide(); }, 1500);
 				}else{
 					if(tuttobene='0'){
 						var newProfile = {

@@ -289,10 +289,15 @@ function pasonosotros(){
 	   eliminarElemento('botones');
 	   $('#profile').empty();
 	}else if (document.getElementById('map_canvas')){
-	   eliminarElemento('map_canvas');
-	   eliminarElemento('tabla_result');
-	   eliminarElemento('text_map');
-	   $('#profile').empty();
+		
+	   if (document.getElementById('entrada')){
+	   	 sole=1;
+	   }else{
+	 	  eliminarElemento('map_canvas');
+	  	  eliminarElemento('tabla_result');
+	  	  eliminarElemento('text_map');
+		  $('#profile').empty();
+	    }
 	}else if (document.getElementById('cabecera_api')){
 	   eliminarElemento('cabecera_api');
 	   eliminarElemento('contenido_api');
@@ -376,16 +381,27 @@ function pasonosotros(){
 function pasorest(){
         //alert(emilio);
 	if (document.getElementById('marcos')){
+	   //alert("marcos");
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
+	   $('#profile').empty();
 	}else if (document.getElementById('map_canvas')){
-	   eliminarElemento('map_canvas');
-	   eliminarElemento('tabla_result');
-	   eliminarElemento('text_map');
+	   //alert("marcos1");
+	   if (document.getElementById('entrada')){
+	   	 emilio=1;
+	   }else{
+	 	  eliminarElemento('map_canvas');
+	  	  eliminarElemento('tabla_result');
+	  	  eliminarElemento('text_map');
+		  $('#profile').empty();
+		}
 	}else if (document.getElementById('cabecera_api')){
+	   //alert("marcos2");
 	   eliminarElemento('cabecera_api');
 	   eliminarElemento('contenido_api');
+	   $('#profile').empty();
 	}else if (document.getElementById('marco1')){
+	   //alert("marcos3");
 	   emilio=1;
 	   $("#wahan").html("Necesitas registrarse ;)");
 	   $("#wahan").show();
@@ -430,10 +446,10 @@ function pasorest(){
 
 		document.getElementById("profile").appendChild(newdiv1);
 
-		newh3a.innerHTML='/_users/_design/interfaz/_view/ngrupos';
-		newh3b.innerHTML='/_users/_design/interfaz/_view/ntid';
-		newh3c.innerHTML='/_users/_design/interfaz/_view/perfil';
-		newh3d.innerHTML='/_users/_design/interfaz/_view/fecha';
+		newh3a.innerHTML='https://profe:123@geomusic.iriscouch.com/_users/_design/interfaz/_view/ngrupos';
+		newh3b.innerHTML='https://profe:123@geomusic.iriscouch.com/_users/_design/interfaz/_view/ntid';
+		newh3c.innerHTML='https://profe:123@geomusic.iriscouch.com/_users/_design/interfaz/_view/perfil';
+		newh3d.innerHTML='https://profe:123@geomusic.iriscouch.com/_users/_design/interfaz/_view/fecha';
 
 	//Aqui se describen los hitos
 	newpa.innerHTML='Devuelve el id de los usuarios, asi como el nombre y los grupos/lugares almacenados en favoritos.';
@@ -471,9 +487,14 @@ function pasoapi(){
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
 	}else if (document.getElementById('map_canvas')){
-	   eliminarElemento('map_canvas');
-	   eliminarElemento('tabla_result');
-	   eliminarElemento('text_map');
+	   if (document.getElementById('entrada')){
+	   	 angel=1;
+	   }else{
+	 	  eliminarElemento('map_canvas');
+	  	  eliminarElemento('tabla_result');
+	  	  eliminarElemento('text_map');
+		  $('#profile').empty();
+	   }
 	}else if (document.getElementById('cabecera_api')){
 	   eliminarElemento('cabecera_api');
 	   eliminarElemento('contenido_api');
@@ -575,7 +596,7 @@ function pasoapi(){
 		newpw.className = 'letraka';
 		newpx.className = 'letraka';
 
-		newh2.innerHTML='Api de Geomusic.';
+		newh2.innerHTML='Info de Geomusic: Metodos programados.';
 
 		newdiv1.appendChild(newh2);
 

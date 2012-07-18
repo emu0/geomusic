@@ -27,6 +27,27 @@
 	
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/es_ES/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<script type="text/javascript">
+  window.___gcfg = {lang: 'es'};
+ (function() {
+ 	var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+   	po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+
 	<div id="divmain">
 		<div id="cabecera">
 			<img id="logo_cabecera" alt="logo" src="Images/logo.gif">
@@ -46,7 +67,7 @@
 		<div id="info">
 			<ul id="nav_uno">
 				<li class="item_nav">
-					<a id="link_api" onclick="pasoapi()" class="link_nav">Geomusic api </a>
+					<a id="link_api" onclick="pasoapi()" class="link_nav">Geomusic Info </a>
 				</li>
 				<li class="item_nav">
 					<a id="Nosotros" onclick="pasonosotros()" class="link_nav">  Todo sobre "nosotros";) </a>
@@ -54,6 +75,21 @@
 				<li class="item_nav">
 					<a id="REST" onclick="pasorest()" class="link_nav"> Peticiones REST</a>
 				</li>
+				<li class="item_nav">
+					<div class="fb-like" data-href="http://geomusic.iriscouch.com/geomusic/_design/geoprueba/index.html" data-send="false" data layout="button_count" data-width="0" data-show-faces="false"></div>
+				</li>
+				
+				<li class="item_nav">	
+					<g:plusone size="medium" annotation="none"></g:plusone>
+				</li>
+
+				<li class="item_nav">
+
+					<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://	geomusic.iriscouch.com/geomusic/_design/geoprueba/index.html" data-via="srsudo" data-lang="es" data-related="jjmerelo" data-hashtags="proyectoaap">Twittear</a>
+
+				</li>
+
+
 			</ul>	
 		</div>
 	</div>
