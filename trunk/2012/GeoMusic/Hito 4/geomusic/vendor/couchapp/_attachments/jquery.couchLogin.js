@@ -33,8 +33,7 @@
 							'<span id="mensaje_reg"></span></fieldset>'+
 						'</form>'+
 					'</div>'+
-				'</div>'+
-		                '<br/><br/><div id="wahan"></div>',
+				'</div>'+'<br/><br/><div id="wahan"></div>',
 		
 		loginForm : '<form class="login"><label for="name">Name</label> <input type="text" name="name" value="" autocapitalize="off" autocorrect="off"><label for="password">Password</label> <input type="password" name="password" value=""><input type="submit" value="Login"><a href="#signup">or Signup</a></form>',
 		signupForm : '<form class="signup"><label for="name">Name</label> <input type="text" name="name" value="" autocapitalize="off" autocorrect="off"><label for="password">Password</label> <input type="password" name="password" value=""><input type="submit" value="Signup"><a href="#login">or Login</a></form>'
