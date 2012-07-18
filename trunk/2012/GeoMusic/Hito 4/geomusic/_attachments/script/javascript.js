@@ -1,13 +1,3 @@
-/**
-
-*COSAS QUE SE PODRÍAN MEJORAR:
- LA COMPROBACIÓN DE CAMPOS DEL REGISTRO PODRÍA SER ALGO INTERESANTE DE HACER.
- COMPROBAR MÁS TIPOS DE ERRORES QUE PODAMOS OBTENER DEL SERVIDOR DE LASTFM EN EL METODO PROCESARRESPUESTA();
- LOS ESTILOS Y COLORES DE ALGUNOS ENLACES.
- ALETOREIDAD DE LAS DIFERENTES IMAGENES.
-
-**/
-
 /** 
 * JAVASCRIPT.JS
 * This document was created by Granada University's students Ángel Bueno, Emilio Martínez and Mª Soledad Pascual for a GEOMUSIC proyect in 'High Performances Architecture' subject.
@@ -30,7 +20,10 @@ var infowindow;
 var tipobusqueda;
 //Un string JSON donde se guardan los grupos favoritos del usuario de la sesión
 var json_grupos;
-
+//Variables que se utilizan para instanciar los metodos de la API al deslogeo
+var sole=0;
+var emilio=0;
+var angel=0;
 /**
 * FUNCIONES	
 **/
@@ -57,18 +50,47 @@ function initialize(){
 }
 
 /**
-* Función para dar paso a la creación del mapa y la búsqueda de datos.
+* Función para comprobar el paso a la creación del mapa y la búsqueda de datos.
 **/
 function crearmapa(valor){
-	//Se da un contenido a la variable del tipo de búsqueda que será utilizada en distintas
-	//funciones y así ofrecer un tipo de datos u otros.
-	tipobusqueda=valor;
-	
-	//Ya podemos realizar la búsqueda
-	conseguirdatos(null);
-	//Y pasar al html del mapa y los resultados
-	pasoamapa();
+	if(valor=="1"){
+		var comprobar=document.getElementById('bandabuscar').value;
+		if(comprobar=="" || comprobar==null){
+			$("#ona").html("Introduce alguna banda alma cantaro ! ");
+	 	        $("#ona").show();
+	   		setTimeout(function() { $("#ona").hide(); }, 2000);
+		}else{
+			makemap(valor);
+		}
+
+	}else if(valor=="2"){
+
+		var comprobar1=document.getElementById('lugarbuscar').value;
+		if(comprobar1=="" || comprobar1==null){
+			$("#hei").html("Introduce algun lugar cohone ! ");
+	 	        $("#hei").show();
+	   		setTimeout(function() { $("#hei").hide(); }, 2000);
+		}else{
+			makemap(valor);
+		}
+
+	}
 }
+
+/**
+* Función para crear el mapa en funcion de lo que estemos buscando.
+**/
+
+function makemap(valor){
+		//Se da un contenido a la variable del tipo de búsqueda que será utilizada en distintas
+		//funciones y así ofrecer un tipo de datos u otros.
+		tipobusqueda=valor;
+		//Ya podemos realizar la búsqueda
+		conseguirdatos(null);
+		//Y pasar al html del mapa y los resultados
+		pasoamapa();
+}
+
 
 /**
 * Función que modifica el DOM para mostrar el html de los resultados de mapa y la tabla con sus búsquedas
@@ -244,8 +266,8 @@ function pasoaseleccion(){
 	//Modificamos el HTML que sea necesario
 	newspan1.innerHTML='<img id="imagengrupo" alt="grupo" src="Images/oasislive.jpg">';
 	newspan2.innerHTML='<img id="imagenmapa" alt="mapa" src="Images/mapa.gif"> ';
-	newspan3.innerHTML='<input class="estilo_input text_input" type="text" id="bandabuscar" autocomplete="on" title="Buscar banda" placeholder="Buscar banda"><input class="estilo_boton text_boton" type="submit"  value="\!Busca!" onclick="crearmapa(1)">';
-	newspan4.innerHTML='<input class="estilo_input text_input" type="text" id="lugarbuscar" title="Buscar localizacion" placeholder="Buscar localizacion"><input class="estilo_boton text_boton" type="submit" value="\!Busca!" onclick="crearmapa(2)">';
+	newspan3.innerHTML='<input class="estilo_input text_input" type="text" id="bandabuscar" autocomplete="on" title="Buscar banda" placeholder="Buscar banda"><input class="estilo_boton text_boton" type="submit"  value="\!Busca!" onclick="crearmapa(1)"><div id="ona"></div>';
+	newspan4.innerHTML='<input class="estilo_input text_input" type="text" id="lugarbuscar" title="Buscar localizacion" placeholder="Buscar localizacion"><input class="estilo_boton text_boton" type="submit" value="\!Busca!" onclick="crearmapa(2)"><div id="hei"></div>';
 	
 	//Se anidan los elementos del DOM
 	newdiv1.appendChild(newspan1);
@@ -261,26 +283,29 @@ function pasoaseleccion(){
 *  Función de modifica el DOM para mostrar el menú de información
 **/
 function pasonosotros(){
-	var sole=0;
+	//alert(sole);
 	if (document.getElementById('marcos')){
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
+	   $('#profile').empty();
 	}else if (document.getElementById('map_canvas')){
 	   eliminarElemento('map_canvas');
 	   eliminarElemento('tabla_result');
 	   eliminarElemento('text_map');
+	   $('#profile').empty();
 	}else if (document.getElementById('cabecera_api')){
 	   eliminarElemento('cabecera_api');
 	   eliminarElemento('contenido_api');
+	   $('#profile').empty();
 	}else if (document.getElementById('marco1')){
 	   sole=1;
 	   $("#wahan").html("Necesitas registrarse ;)");
 	   $("#wahan").show();
-	   setTimeout(function() { $("#wahan").hide(); }, 2000);
-
+	   setTimeout(function() { $("#wahan").hide(); }, 1000);
 	}else{
 	   return;
         }
+	//alert(sole);
 	if(sole==0){
 
 		var newdiv1=document.createElement("div");
@@ -329,7 +354,7 @@ function pasonosotros(){
 
 	newpc.innerHTML='En el tercer hito, se abordo realmente lo que es en sí el codigo del proyecto. En este hito, nos encontramos con muchos problemas, destacando sobre todo, el tema de NodeJs y el alojamiento web."In extremis", nuestro profe JJMerelo nos mostro la cosa más potente de nuestra vida hasta la fecha: irisCouch&Couchaap. Tras sucesivas noches de insomnio, por partes de los tres integrantes del grupo, y teniendo en cuenta que tuvimos que usar un unico ordenador debido a que no descubrimos como clonar las bases de datos, conseguimos entregar el hito a tiempo. ¡INCREIBLE!';
 
-	newpd.innerHTML='El último hito supuso un reto para todos los componentes del grupo. Dias de calor, sudor y lagrimas en el aulario de ciencias (seguido del riguroso post-tapeo) conseguimos realmente que la aplicacion cumpliese la funcionalidad especificada en el Hito 1. Ademas, se consiguio un aprendizaje gradual desde lo mas basico hasta cuestiones mas complejas. El desarrollo de esta ultima practica se hizo en largas sesiones de "hackaton" en el que todos los componentes participaron de forma activa ayudandose unos a otros, dando ideas y corrigiendo errores.';
+	newpd.innerHTML='El ultimo hito supuso un reto para todos los componentes del grupo. Dias de calor, sudor y lagrimas en el aulario de ciencias (seguido del riguroso post-tapeo) conseguimos realmente que la aplicacion cumpliese la funcionalidad especificada en el Hito 1. Ademas, se consiguio un aprendizaje gradual desde lo mas basico hasta cuestiones mas complejas. El desarrollo de esta ultima practica se hizo en largas sesiones de "hackaton" en el que todos los componentes participaron de forma activa ayudandose unos a otros, dando ideas y corrigiendo errores.';
 
 	newh3a.appendChild(newpa);
 	newh3b.appendChild(newpb);
@@ -343,15 +368,105 @@ function pasonosotros(){
 
 	document.getElementById("profile").appendChild(newdiv2);
 }else{
+	sole=0;
 	return;
 }
 }//Fin de metodo
+
+function pasorest(){
+        //alert(emilio);
+	if (document.getElementById('marcos')){
+	   eliminarElemento('marcos');
+	   eliminarElemento('botones');
+	}else if (document.getElementById('map_canvas')){
+	   eliminarElemento('map_canvas');
+	   eliminarElemento('tabla_result');
+	   eliminarElemento('text_map');
+	}else if (document.getElementById('cabecera_api')){
+	   eliminarElemento('cabecera_api');
+	   eliminarElemento('contenido_api');
+	}else if (document.getElementById('marco1')){
+	   emilio=1;
+	   $("#wahan").html("Necesitas registrarse ;)");
+	   $("#wahan").show();
+	   setTimeout(function() { $("#wahan").hide(); }, 1000);
+	}else{
+	   return;
+        }
+        //alert(emilio);
+	if(emilio =='0'){
+
+		var newdiv1=document.createElement("div");
+
+		var newdiv2=document.createElement("div");
+
+		var newh2=document.createElement("h1");
+
+		var newh3a=document.createElement("h3");
+		var newh3b=document.createElement("h3");
+		var newh3c=document.createElement("h3");
+		var newh3d=document.createElement("h3");
+		var newh3e=document.createElement("h3");
+
+		var newpa=document.createElement("p");
+		var newpb=document.createElement("p");
+		var newpc=document.createElement("p");
+		var newpd=document.createElement("p");
+		var newpe=document.createElement("p");
+
+		newdiv1.id ='cabecera_api';
+		newdiv2.id='contenido_api';
+		newdiv2.className= 'scroll-s';
+		
+		newpa.className = 'letraka';
+		newpb.className = 'letraka';
+		newpc.className = 'letraka';
+		newpd.className = 'letraka';
+		newpe.className = 'letraka';
+
+		newh2.innerHTML='Peticiones REST';
+
+		newdiv1.appendChild(newh2);
+
+		document.getElementById("profile").appendChild(newdiv1);
+
+		newh3a.innerHTML='/_users/_design/interfaz/_view/ngrupos';
+		newh3b.innerHTML='/_users/_design/interfaz/_view/ntid';
+		newh3c.innerHTML='/_users/_design/interfaz/_view/perfil';
+		newh3d.innerHTML='/_users/_design/interfaz/_view/fecha';
+
+	//Aqui se describen los hitos
+	newpa.innerHTML='Devuelve el id de los usuarios, asi como el nombre y los grupos/lugares almacenados en favoritos.';
+
+	newpb.innerHTML='Devuelve la id de todos los usuarios.';
+
+	newpc.innerHTML='Devuelve el perfil de todos los usuarios conteniendo el nickname y el email registrado';
+
+	newpd.innerHTML='Nos indica la fecha de creacion de cada una de las cuentas registradas';
+
+	newh3a.appendChild(newpa);
+	newh3b.appendChild(newpb);
+	newh3c.appendChild(newpc);
+	newh3d.appendChild(newpd);
+
+	newdiv2.appendChild(newh3a);
+	newdiv2.appendChild(newh3b);
+	newdiv2.appendChild(newh3c);
+	newdiv2.appendChild(newh3d);
+
+	document.getElementById("profile").appendChild(newdiv2);
+	}else{
+		emilio=0;
+		return;
+		
+	}
+}//Fin de funcion
 
 /**
 *  Función de modifica el DOM para mostrar el menú de la API
 **/
 function pasoapi(){
-	var angel=0;
+	//alert(angel);
 	if (document.getElementById('marcos')){
 	   eliminarElemento('marcos');
 	   eliminarElemento('botones');
@@ -366,24 +481,19 @@ function pasoapi(){
 	   angel=1;
 	   $("#wahan").html("Necesitas registrarse ;)");
 	   $("#wahan").show();
-	   setTimeout(function() { $("#wahan").hide(); }, 2000);
-
+	   setTimeout(function() { $("#wahan").hide(); }, 1000);
 	}else{
 	   return;
         }
+	//alert(angel);
 	if(angel=='0'){
-
-		var array1=new Array(26);	
-		var array2=new Array(26);
-		var array3=new Array(26);
-		var array4=new Array(26);
 			
 		var newdiv1=document.createElement("div");
 
 		var newdiv2=document.createElement("div");
 
 		var newh2=document.createElement("h1");
-		// 23
+
 		var newh3a=document.createElement("h3");
 		var newh3b=document.createElement("h3");
 		var newh3c=document.createElement("h3");
@@ -407,6 +517,7 @@ function pasoapi(){
 		var newh3u=document.createElement("h3");
 		var newh3v=document.createElement("h3");
 		var newh3w=document.createElement("h3");
+		var newh3x=document.createElement("h3");
 
 
 		var newpa=document.createElement("p");
@@ -432,7 +543,7 @@ function pasoapi(){
 		var newpu=document.createElement("p");
 		var newpv=document.createElement("p");
 		var newpw=document.createElement("p");
-
+		var newpx=document.createElement("p");
 
 
 		newdiv1.id ='cabecera_api';
@@ -462,6 +573,7 @@ function pasoapi(){
 		newpu.className = 'letraka';
 		newpv.className = 'letraka';
 		newpw.className = 'letraka';
+		newpx.className = 'letraka';
 
 		newh2.innerHTML='Api de Geomusic.';
 
@@ -493,11 +605,12 @@ function pasoapi(){
 		newh3u.innerHTML='comprobarElemento() , parametros: nombre, tipo';
 		newh3v.innerHTML='actualizarDatos()'; 
 		newh3w.innerHTML='actualizarDatosInd()'; 
+		newh3x.innerHTML='makeMap() , parametros: valor'; 
 
 	//Aqui se describen los hitos
 
 		newpa.innerHTML = 'Inicializa el mapa de Google';
-		newpb.innerHTML = 'Crea mapa en funcion del tipo de busqueda que queremos hacer';
+		newpb.innerHTML = 'Comprueba si se ha introducido algun valor y en caso contrario, avisa al usuario.';
 		newpc.innerHTML = 'Modifica el DOM para mostrar el HTML de los resultados de mapas y de la tabla con sus busquedas';
 		newpd.innerHTML = 'Nos permite acceder a los grupos favoritos en HTML';
 		newpe.innerHTML = 'Nos permite acceder a la pantalla de los mapas';
@@ -519,7 +632,7 @@ function pasoapi(){
 		newpu.innerHTML = 'Función que comprueba si una banda está en el Array de las bandas';
 		newpv.innerHTML = 'Nos permite actualizar los datos en la base de datos';
 		newpw.innerHTML = 'Actualiza los datos desde el menu usuario';
-
+		newpx.innerHTML = 'Es el que nos permite crear los mapas usando la API de GoogleMap.';
 
 		newh3a.appendChild(newpa);
 		newh3b.appendChild(newpb);
@@ -545,6 +658,7 @@ function pasoapi(){
 		newh3u.appendChild(newpu);
 		newh3v.appendChild(newpv);
 		newh3w.appendChild(newpw);
+		newh3x.appendChild(newpx);
 
 		newdiv2.appendChild(newh3a);
 		newdiv2.appendChild(newh3b);
@@ -570,14 +684,13 @@ function pasoapi(){
 		newdiv2.appendChild(newh3u);
 		newdiv2.appendChild(newh3v);
 		newdiv2.appendChild(newh3w);
-
-	document.getElementById("profile").appendChild(newdiv2);
-
-
-}else{
-	return;
-}
-
+		newdiv2.appendChild(newh3x);
+		document.getElementById("profile").appendChild(newdiv2);
+		angel=0;
+	}else{
+		angel=0;
+		return;
+	}
 }//FIn de funcion
 /**
 * Función que monta el enlace para realizar la petición REST al API del lastfm
@@ -855,7 +968,7 @@ function eliminarElemento(id){
 	elemento = document.getElementById(id);
 	//Comprobamos si existe o no y actuamos en consecuencia
 	if (!elemento){
-		alert("El elemento seleccionado no existe");
+		alert("El elemento seleccionado no existe: "+elemento);
 	} else {
 		padre = elemento.parentNode;
 		padre.removeChild(elemento);
