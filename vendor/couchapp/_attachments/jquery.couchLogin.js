@@ -74,9 +74,21 @@
 				password:pass,	
 				success:initWidget, 
 				error: function(){
-				$("#mensaje_login").html("Te has equivocado :(");
-				$("#mensaje_login").show();
-				}
+
+					if(name==null || name == ""){
+						$("#mensaje_login").html("Has escrito mal el nombre :(");
+				                $("#mensaje_login").show();
+	   					setTimeout(function() { $("#mensaje_login").hide(); }, 1500);
+					}else if(pass==null || pass == ""){
+						$("#mensaje_login").html("Has escrito mal el password :(");
+				                $("#mensaje_login").show();
+	   					setTimeout(function() { $("#mensaje_login").hide(); }, 1500);
+					}else{
+						$("#mensaje_login").html("Te has equivocado :(");
+						$("#mensaje_login").show();
+	   					setTimeout(function() { $("#mensaje_login").hide(); }, 1500);
+					}	
+				}//FIn del error
 			}); 
 			
 		};
@@ -94,7 +106,16 @@
 		});
 		
 		elem.delegate("a[href=#logout]", "click", function() {
-			$.couch.logout({success : initWidget});
+			$.couch.logout({
+				success : function(){
+					$('#profile').empty();
+					initWidget();
+					sole=0;
+					emilio=0;
+					angel=0;
+
+				}
+			});//FIn del logout
 			return false;
 		});
 		
@@ -108,10 +129,23 @@
 			var name = $('input[name="name"]', this).val(),  
 			pass = $('input[name="password"]', this).val();
 			$.couch.signup({name : name}, pass, {
-				success : function() {doLogin(name, pass)},
+				success : function() {
+
+					if(name==null || name==""){
+						$("#mensaje_reg").html("Escribe un nombre :(");
+						$("#mensaje_reg").show();
+	   					setTimeout(function() { $("#mensaje_reg").hide(); }, 2000);
+					}else if (pass==null || pass==""){
+						$("#mensaje_reg").html("Escribe un password :(");
+						$("#mensaje_reg").show();
+	   					setTimeout(function() { $("#mensaje_reg").hide(); }, 2000);
+					}else{
+						doLogin(name, pass)}
+					},
 				error: function(){
-					$("#mensaje_reg").html("Nombre ya utilizado :(");
+					$("#mensaje_reg").html("Te has equivocado :(");
 					$("#mensaje_reg").show();
+	   				setTimeout(function() { $("#mensaje_reg").hide(); }, 2000);
 				}
 			});
 			return false;      
