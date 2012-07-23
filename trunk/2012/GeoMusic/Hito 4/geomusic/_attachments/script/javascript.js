@@ -612,7 +612,7 @@ function pasoapi(){
 		newh3h.innerHTML='conseguirdatos() , parametros: fuente, tipo.';
 		newh3i.innerHTML='getInfo() , parametros: url';
 		newh3j.innerHTML='procesarRespuesta()';
-		newh3k.innerHTML='ponerResutados() , parametros: geoArray, nombreArray, fechaArray, lugarArray, direccionArray, websiteArray';
+		newh3k.innerHTML='ponerResutados() , parametros: geoArray, tituloArray, fechaArray, lugarArray, direccionArray, websiteArray';
 		newh3l.innerHTML='evento() , parametros: nombre, tipo';
 		newh3m.innerHTML='eliminarElemento() , parametros: id';
 		newh3n.innerHTML='addMarker() , parametros: posicion, titulo, fecha, lugar, direccion, website';
@@ -777,6 +777,18 @@ function procesarRespuesta(){
 	//Ya se puede ocultar el spinner
 	$("#spinner").hide();
 	
+	//Creamos las variables necesarias
+        var adress = 'Congo';
+        var geo = new Array;
+        var geoArray = [];
+        var tituloArray = [];
+        var ciudadArray = [];
+	var geoArray_part = [0,0];
+	var fechaArray = [];
+	var lugarArray = [];
+	var direccionArray = [];
+	var websiteArray = [];
+	
 	//Realizamos un rastreo del mensaje que obtenemos del servidor
 	//Si obtenemos respuesta seguimos adelante
 	if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
@@ -796,80 +808,79 @@ function procesarRespuesta(){
         		else if(datos.events.total == 0){
         			ponerResultados([], ["Parece que aun no hay fechas programadas para esta banda :("]);
         			map.setZoom(1);
+        			
         		}
-        		//Si hay información
-        		else{
-        			//Creamos las variables necesarias
-        			var adress = 'Congo';
-        			var error = false;
-        			var geo = new Array;
-        			var nombreArray = new Array;
-        			var geoArray = [];
-        			var nombreArray = [];
-	        		var geoArray_part = [0,0];
-	        		var fechaArray = [];
-	        		var lugarArray = [];
-	        		var direccionArray = [];
-	        		var websiteArray = [];
-	        		
+        		//Si hay información y es más de un resultado
+        		else{	  
+        			//Si se tiene varios elementos
+        			if(datos.events.event.length > 1){
 	        		//Rastreamos el XML según su estructura en búsqueda de eventos
 	        		for(i in datos.events.event){
-	        			error=false;
 	        			//Obtenemos las coordenadas del evento si no ocurre ningun error
-	        			try{
-		        			geoArray_part[0] = datos.events.event[i].venue.location["geo:point"]["geo:lat"];
-	        				geoArray_part[1] = datos.events.event[i].venue.location["geo:point"]["geo:long"];
-	        			}
-	        			//Si ocurre algún error nos saltamos este evento
-	        			catch(err){
-	        				i=i-1;
-	        				error = true;	        			
-	        			}
-	        			if(error==false){
-	        				//Si existen las coordenadas
-	        				if(geoArray_part[0] != ''){
-	        					//Se añaden al array de geocoordenadas
-	        					geoArray = geoArray.concat(new google.maps.LatLng(geoArray_part[0], geoArray_part[1]));
-	        					
-	        					//En función de un tipo de búsqeda u otra se añade la información al array de nombres
-	        					if(tipobusqueda==1){
-	        						nombreArray = nombreArray.concat(datos.events.event[i].venue.location.city);
+		        		geoArray_part[0] = datos.events.event[i].venue.location["geo:point"]["geo:lat"];
+	        			geoArray_part[1] = datos.events.event[i].venue.location["geo:point"]["geo:long"];
+	        			
+	        			//Si existen las coordenadas
+	        			if(geoArray_part[0] != ''){
+	        				//Se añaden al array de geocoordenadas
+	        				geoArray = geoArray.concat(new google.maps.LatLng(geoArray_part[0], geoArray_part[1]));
+	        				//En función del tipo de búsqueda algunos campos cambian
+	        				if (tipobusqueda == 1){
+	        					if(datos.events.event[i].venue.location.city == ''){
+	        						tituloArray = tituloArray.concat(datos.events.event[i].title);
 	        					}
 	        					else{
-	        						nombreArray = nombreArray.concat(datos.events.event[i].title);
+	        						tituloArray = tituloArray.concat(datos.events.event[i].venue.location.city);
 	        					}
-	        					//Y se añaden los elementos de los arrays de la fecha, lugar, dirección y website
+	        					ciudadArray = ciudadArray.concat(datos.events.event[i].title);
+	        				}
+	        				else{
+	        					tituloArray = tituloArray.concat(datos.events.event[i].title);
+	        					ciudadArray = ciudadArray.concat(datos.events.event.venue[i].location.city);
+	        				}
+	        				
+	        				//Y se añaden los elementos de los arrays de la fecha,, dirección y website
+	        				fechaArray = fechaArray.concat(datos.events.event[i].startDate.slice(0, 16));
+	        				lugarArray = lugarArray.concat(datos.events.event[i].venue["name"]);
+	        				direccionArray = direccionArray.concat(datos.events.event[i].venue.location.street);
+	        				websiteArray = websiteArray.concat(datos.events.event[i].venue.website);
+	        			}
+	        			//Si no las hay, tiramos de plan B
+	        			else{
+	        				//Si el plan B da resultado seguimos pa'lante', sino pues ignoramos ese campo
+	        				if(codeAddress(datos.events.event[i].venue["name"], datos.events.event[i].venue.location.city) != null){
+	        					geoArray = geoArray.concat(codeAddress(datos.events.event[i].venue["name"], datos.events.event[i].venue.location.city));	        	
+	        					//En función del tipo de búsqueda algunos campos cambian
+	        					if (tipobusqueda == 1){
+	        					if(datos.events.event[i].venue.location.city == ''){
+	        						tituloArray = tituloArray.concat(datos.events.event[i].title);
+	        					}
+	        					else{
+	        						tituloArray = tituloArray.concat(datos.events.event[i].venue.location.city);
+	        					}
+	        					ciudadArray = ciudadArray.concat(datos.events.event[i].title);
+	        				}
+	        				else{
+	        					tituloArray = tituloArray.concat(datos.events.event[i].title);
+	        					ciudadArray = ciudadArray.concat(datos.events.event[i].venue.location.city);
+	        				}
+	        					
+	        					//Y se añaden los elementos de los arrays de la fecha,, dirección y website
 	        					fechaArray = fechaArray.concat(datos.events.event[i].startDate.slice(0, 16));
 	        					lugarArray = lugarArray.concat(datos.events.event[i].venue["name"]);
 	        					direccionArray = direccionArray.concat(datos.events.event[i].venue.location.street);
 	        					websiteArray = websiteArray.concat(datos.events.event[i].venue.website);
 	        				}
-	        				//Si no las hay, tiramos de plan B
-	        				else{
-	        					//Si el plan B da resultado seguimos pa'lante', sino pues ignoramos ese campo
-	        					if(codeAddress(datos.events.event[i].venue["name"], datos.events.event[i].venue.location.city) != null){
-	        						geoArray = geoArray.concat(codeAddress(datos.events.event[i].venue["name"], datos.events.event[i].venue.location.city));
-	        						if(tipobusqueda==1){
-	        							nombreArray = nombreArray.concat(datos.events.event[i].venue.location.city);
-	        						}
-	        						else{
-	        							nombreArray = nombreArray.concat(datos.events.event[i].title);
-	        						}
-	        						fechaArray = fechaArray.concat(datos.events.event[i].startDate.slice(0, 16));
-		        					lugarArray = lugarArray.concat(datos.events.event[i].venue["name"]);
-		        					direccionArray = direccionArray.concat(datos.events.event[i].venue.location.street);
-		        					websiteArray = websiteArray.concat(datos.events.event[i].venue.website);
-	        					}
-	        				}
-	        			}  			
+	        			}
+	        			
 	        		}
 	        		//Comprobamos los arrays en busca de fall0s
 	        		var indice;
 	        		do{
-	        			indice = nombreArray.indexOf("");
+	        			indice = tituloArray.indexOf("");
 	        			if(indice != -1){
-	        				geoArray.splice(indice, 1);	 
-	        				nombreArray.splice(indice, 1);	   
+	        				geoArray.splice(indice, 1);
+	        				ciudadArray.splice(indice, 1);	 	   
 	        				fechaArray.splice(indice, 1);
 	        				lugarArray.splice(indice, 1);
 	        				direccionArray.splice(indice, 1);
@@ -878,9 +889,64 @@ function procesarRespuesta(){
 	        			}
 	        		//Mientras haya espacios en blanco
 	        		}while(indice !=-1);
-	        		
+	        		}
+	        		//Tiene un único elemento
+	        		else{
+	        			//Obtenemos las coordenadas del evento si no ocurre ningun error
+		        		geoArray_part[0] = datos.events.event.venue.location["geo:point"]["geo:lat"];
+	        			geoArray_part[1] = datos.events.event.venue.location["geo:point"]["geo:long"];
+	        			//Si existen las coordenadas
+	        			if(geoArray_part[0] != ''){
+	        				//Se añaden al array de geocoordenadas
+	        				geoArray = geoArray.concat(new google.maps.LatLng(geoArray_part[0], geoArray_part[1]));
+	        				//En función del tipo de búsqueda algunos campos cambian
+	        				if (tipobusqueda == 1){
+	        					if(datos.events.event.venue.location.city == ''){
+	        						tituloArray = tituloArray.concat(datos.events.event.title);
+	        					}
+	        					else{
+	        						tituloArray = tituloArray.concat(datos.events.event.venue.location.city);
+	        					}
+	        					ciudadArray = ciudadArray.concat(datos.events.event.title);
+	        				}
+	        				else{
+	        					tituloArray = tituloArray.concat(datos.events.event.title);
+	        					ciudadArray = ciudadArray.concat(datos.events.event.venue.location.city);
+	        				}
+	        				//Y se añaden los elementos de los arrays de la fecha,, dirección y website
+	        				fechaArray = fechaArray.concat(datos.events.event.startDate.slice(0, 16));
+	        				lugarArray = lugarArray.concat(datos.events.event.venue["name"]);
+	        				direccionArray = direccionArray.concat(datos.events.event.venue.location.street);
+	        				websiteArray = websiteArray.concat(datos.events.event.venue.website);
+	        			}
+	        			//Si no las hay, tiramos de plan B
+	        			else{
+	        				//Si el plan B da resultado seguimos pa'lante', sino pues ignoramos ese campo
+	        				if(codeAddress(datos.events.event[i].venue["name"], datos.events.event.venue.location.city) != null){
+	        					geoArray = geoArray.concat(codeAddress(datos.events.event.venue["name"], datos.events.event.venue.location.city));	        	
+	        					if (tipobusqueda == 1){
+	        						if(datos.events.event.venue.location.city == ''){
+	        							tituloArray = tituloArray.concat(datos.events.event.title);
+	        						}
+	        						else{
+	        							tituloArray = tituloArray.concat(datos.events.event.venue.location.city);
+	        						}
+	        						ciudadArray = ciudadArray.concat(datos.events.event.title);
+	        					}
+	        					else{
+	        						tituloArray = tituloArray.concat(datos.events.event.title);
+	        						ciudadArray = ciudadArray.concat(datos.events.event.venue.location.city);
+	        					}
+	        					//Y se añaden los elementos de los arrays de la fecha,, dirección y website
+	        					fechaArray = fechaArray.concat(datos.events.event.startDate.slice(0, 16));
+	        					lugarArray = lugarArray.concat(datos.events.event.venue["name"]);
+	        					direccionArray = direccionArray.concat(datos.events.event.venue.location.street);
+	        					websiteArray = websiteArray.concat(datos.events.event.venue.website);
+	        				}
+	        			}
+	        		}
 	        		//Cuando ya tenemos toda la información se coloca en el mapa y en la tabla
-	        		ponerResultados(geoArray, nombreArray, fechaArray, lugarArray, direccionArray, websiteArray);
+	        		ponerResultados(geoArray, tituloArray, ciudadArray, fechaArray, lugarArray, direccionArray, websiteArray);
     			}
         	}                    
     	}
@@ -896,15 +962,15 @@ function procesarRespuesta(){
 /**
 * Función que pone la información en el mapa y/o en la tabla de resultado
 **/
-function ponerResultados(geoArray, nombreArray, fechaArray, lugarArray, direccionArray, websiteArray){
+function ponerResultados(geoArray, tituloArray, ciudadArray, fechaArray, lugarArray, direccionArray, websiteArray){
 	//Variable donde se enganchará los diferentes eventos encontrados
 	var ul_tabla = document.getElementById("ul_tabla")
 	//En esta variable definimos los límites del mapa a mostrar
 	bounds = new google.maps.LatLngBounds();
-	//Si el nombreArray es null hay que tener en cuenta que obtenemos un formato JSON en nombreArray
+	//Si el tituloArray es null hay que tener en cuenta que obtenemos un formato JSON en tituloArray
 	//Vamos que con elementos que NO son arrays aunque el nombre lo diga así
 	if(geoArray == null){
-		if(nombreArray == null){
+		if(tituloArray == null){
 			//Creamos un nuevo div
 	 		var newdiv=document.createElement("div");
 			newdiv.className = 'elemento-resultado';
@@ -913,8 +979,8 @@ function ponerResultados(geoArray, nombreArray, fechaArray, lugarArray, direccio
 	 		ul_tabla.appendChild(newdiv);
 		}
 		else{
-			//En este caso el nombreArray tiene formato JSON
-			eval("var miObjeto = {"+nombreArray+"}"); 
+			//En este caso el tituloArray tiene formato JSON
+			eval("var miObjeto = {"+tituloArray+"}"); 
 			for(i in miObjeto){
 				//Creamos un nuevo div con el nombre del lugar del evento y lo añadimos a la tabla
  				var newdiv=document.createElement("div");
@@ -936,23 +1002,23 @@ function ponerResultados(geoArray, nombreArray, fechaArray, lugarArray, direccio
 		if(geoArray.length == 0){
 			var newdiv=document.createElement("div");
 			newdiv.className = 'elemento-resultado';
-			newdiv.innerHTML = nombreArray[0];
+			newdiv.innerHTML = tituloArray[0];
 			ul_tabla.appendChild(newdiv);
 		}
 		//O mostrar los elementos encontrados
 		else{
 			//Rastreamos el array de nombres		
- 			for(i in nombreArray){
+ 			for(i in tituloArray){
  				//Creamos un nuevo div con el nombre del lugar del evento y lo añadimos a la tabla
  				var newdiv=document.createElement("div");
- 				newdiv.id = nombreArray[i];
+ 				newdiv.id = tituloArray[i];
 				newdiv.className = 'elemento-resultado';
 				//También creamos un botón para añadir/borrar de la base de datos
- 				newdiv.innerHTML = nombreArray[i]+'<input class="boton_fav_ind" src="" type="image" name="'+nombreArray[i]+'" value="" onclick="">';
+ 				newdiv.innerHTML = tituloArray[i]+'<input class="boton_fav_ind" src="" type="image" name="'+tituloArray[i]+'" value="" onclick="">';
  				ul_tabla.appendChild(newdiv);
 
 				//Añadimos el marcador
-				addMarker(geoArray[i], nombreArray[i], fechaArray[i], lugarArray[i], direccionArray[i], websiteArray[i]);
+				addMarker(geoArray[i], tituloArray[i], ciudadArray[i], fechaArray[i], lugarArray[i], direccionArray[i], websiteArray[i]);
 				//Establecemos un nuevo límite del mapa
 				bounds.extend(geoArray[i]);
 			}
@@ -999,7 +1065,7 @@ function eliminarElemento(id){
 /**
 * Función que añade un marcador al mapa
 **/
-function addMarker(posicion, titulo, fecha, lugar, direccion, website){
+function addMarker(posicion, titulo, ciudad, fecha, lugar, direccion, website){
 	//Creamos el marcador y le añadimos la información
 	var marker = new google.maps.Marker({
 		position: posicion,
@@ -1009,13 +1075,13 @@ function addMarker(posicion, titulo, fecha, lugar, direccion, website){
         	title: titulo
 	});
 	//Asociamos a cada marcador una ventana de información
-	infoMarker(marker, titulo, fecha, lugar, direccion, website);
+	infoMarker(marker, titulo, ciudad, fecha, lugar, direccion, website);
 }
 
 /**
 * Función para crear una ventana de información y gestionar los eventos del mapa
 **/
-function infoMarker(marker, titulo, fecha, lugar, direccion, website){	
+function infoMarker(marker, titulo, ciudad, fecha, lugar, direccion, website){	
 	//var newlatlng = new google.maps.LatLng(marker.getPosition().lat()+5, marker.getPosition().lng());
 	var div = document.getElementById(titulo);
 	
@@ -1023,6 +1089,7 @@ function infoMarker(marker, titulo, fecha, lugar, direccion, website){
 	google.maps.event.addListener(marker, 'click', function(){
 		//Se indica la información que va a mostrar
 		infowindow.setContent(	"<h3>"+titulo+"</h3>"+
+					"<p>"+ciudad+"</p>"+ 
 					"<p>"+fecha+"</p>"+
 					"<p>"+lugar+", "+direccion+"<br>"+
 					"<a href="+website+">Direccion web</a>");
@@ -1033,6 +1100,7 @@ function infoMarker(marker, titulo, fecha, lugar, direccion, website){
 	//Evento para mostrar la ventana de información si se clicka en el div correspondiente a un elemento de la taba del mapa
 	google.maps.event.addDomListener(div, 'click', function(){
 		infowindow.setContent(	"<h3>"+titulo+"</h3>"+
+					"<p>"+ciudad+ "</p>"+ 
 					"<p>"+fecha+"</p>"+
 					"<p>"+lugar+", "+direccion+"<br>"+
 					"<a href="+website+">Direccion web</a>");
