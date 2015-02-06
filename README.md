@@ -11,7 +11,8 @@ http://geomusic.iriscouch.com/geomusic/_design/geomusic/index.html
 #### Useful information
 The following information is imported from Subversion WIKI (In Spanish)
 
-This application is still available (January 2015)
+
+This application is still available (January 2015) but it is unattended since 2012.
 
 #PROYECTO GEOMUSIC
 
