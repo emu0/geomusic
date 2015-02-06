@@ -9,10 +9,10 @@ Stable version can be found here:
 http://geomusic.iriscouch.com/geomusic/_design/geomusic/index.html
 
 #### Useful information
-The following information is imported from Subversion WIKI (In Spanish)
-
-
+Developed for testing NoSQL CouchDB server in 2012 for the Advanced Processing Architectures course.
 This application is still available (January 2015) but it is unattended since 2012.
+
+The following information is imported from Subversion WIKI (In Spanish)
 
 #PROYECTO GEOMUSIC
 
