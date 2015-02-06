@@ -1,4 +1,4 @@
-## GEOMUSIC
+# GEOMUSIC
 
 Imported from Subversion:
 http://aap-etsiit-ugr.googlecode.com/svn/trunk/2012/GeoMusic/Hito%204/geomusic/
@@ -6,13 +6,14 @@ http://aap-etsiit-ugr.googlecode.com/svn/trunk/2012/GeoMusic/Hito%204/geomusic/
 Stable version can be found here:
 http://geomusic.iriscouch.com/geomusic/_design/geomusic/index.html
 
-
+## Useful information
 Copied WIKI from Subversion (In Spanish)
-#summary Creadores: Angel, Emilio y Sole
 
-= PROYECTO GEOMUSIC. =
+Creadores: Angel, Emilio y Sole
 
-== Miembros ==
+#PROYECTO GEOMUSIC
+
+##Miembros
 
 Este proyecto ha sido programado por:
 
@@ -20,11 +21,11 @@ Este proyecto ha sido programado por:
  * Angel Bueno (srsudo)
  * Soledad Pascual (marsolpv aka sole)
 
-== Descripcion general ==
+##Descripcion general
 
 Geomusic es un proyecto de software libre en el cual se emplean los conocimientos adquiridos a lo largo de la asignatura de AAP: jquery, javascript, json, algo de nodejs y lo mas importante, las bases de datos no relaciones, usando couchapp como el maximo exponente de dicho tipo de base de datos para desarrollar un proyecto que permita gestionar grupos musicales y nos permita localizar los conciertos de dicho grupo, además de los conciertos disponibles en una zona. Así, aunando todas las tecnologias disponibles y aprendidas, hemos sido capaces de desarrollar una aplicacion que cumple la funcionalidad prevista en hitos anteriores.
 
-== Desarrollo del proyecto ==
+##Desarrollo del proyecto
 
 Tal y como se indicó en hitos precedentes, la funcionalidad requerida era la desarrollar una aplicación que fuese capaz de realizar una  búsqueda basada en geolocalización (Geo+Music) en función del grupo de música o de la localidad deseada. Teniendo esto en mente, se implementó una interfaz en la que se permitían sendas entradas para lograr dicha la funcionalidad requerida. Acto seguido, se trató el tema de los mapas usando para ello la [https://developers.google.com/maps/?hl=es API de Google Maps]. Posteriormente,nos dimos cuenta que con el mapa solo no se iba a ningún lado, asi que, usando la api de [http://www.lastfm.es/api lastfm] fuimos capaces de obtener los datos que requeríamos en función de la búsqueda realizada. Por ultimo, quedaba lo mas difícil: El alojamiento web y la base de datos. Esta ha sido la parte mas larga ya que couchapp presenta una documentación escasa, aunque gracias a los ejemplos que se explicaron en clase (y a la paciencia del profesor )fuimos capaces de entender la estructura de estas bases de datos y lanzarnos al desarrollo web en sí.Por otro lado, se implementó el modelo vista-controlador, en el que a partir de una única pagina web vamos modificando todas las etiquetas que consideramos oportunas para alcanzar el fin deseado, actualizando según necesidades. Dos partes fueron realmente complicadas: La parte del parseo de la información para los mapas, y el tema de las sesiones y el ingreso de nuevos usuarios/grupos. 
 
@@ -32,7 +33,7 @@ Una vez solventado estos problemas,lanzamos una versión que podríamos decir "b
 
 Nótese que la aplicación es totalmente abierta y escalable, pudiendo mejorarla en ciertos aspectos y lanzarla a posibles versiones mucho más "serias" que excedan más allá del marco universitario.
 
-== Estructura del proyecto ==
+##Estructura del proyecto
 
 Couchapp genera una jerarquia de carpetas que son utilizadas con distintos fines. En este documento, explicaremos paso a paso cada una de las carpetas y documentos que componen geomusic. 
 Las primeras carpetas que encontramos según abrimos la carpeta principal _*“Geomusic”*_ son:
