@@ -20,7 +20,7 @@ The following information is imported from Subversion WIKI (In Spanish)
 
 Este proyecto ha sido programado por:
 
- * Emilio José Martínez Péres (GitHub user: emu0)
+ * Emilio José Martínez Pérez (GitHub user: emu0)
  * Angel Bueno (Not a Github user)
  * Soledad Pascual (Not a Github user)
 
